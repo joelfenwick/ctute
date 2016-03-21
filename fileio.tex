@@ -1,0 +1,87 @@
+
+\chapter{fileio}
+
+Files in standard C are represented by \texttt{FILE*}.\footnote{Do not try to follow a \texttt{FILE*}, there is no point.}
+The input/output functions you have been using have file versions.
+Aside from taking a \texttt{FILE*} as an extra first parameter, they work in the same way.
+
+The standard io steams already have \texttt{FILE*} variables defined for them.
+\texttt{stdin} is standard input, \texttt{stdout} is standard output and \texttt{stderr} is the standard error stream. 
+For example:
+\lstinline!printf("%s", "Hello world")! is equivalent to \lstinline!fprintf(stdout, "%s", "Hello world")!.\\
+\lstinline!scanf("%d", n[x])! is equivalent to \lstinline!fscanf(stdin, "%d", n[x])!.\\
+
+To access external files, use \texttt{fopen} to get \texttt{FILE*} and \texttt{fclose} when you are finished.
+For example:
+\begin{lstlisting}[numbers=none]
+FILE* f=fopen("message.txt", "r");
+/* some code */
+fprintf(f, "%s", "Greetings\n");
+/* more code */
+fclose(f);
+\end{lstlisting}
+The second parameter on \texttt{fopen}, indicates whether the file should be opened for reading or writing\footnote{see documentation for other options}.
+The code above, assumes that the open succeeded, but what if the file isn't there?
+\texttt{fopen} will return a NULL pointer if the open fails, so we could test for that with something like:\\
+\lstinline!if (f==NULL)! or \lstinline!if (f==0)! or \lstinline@if (!f)@
+
+Another aspect of standard C io which is important to understand is \emph{buffering}.
+Output statements\footnote{fprintf, fputc, \ldots} may execute without the output actually being sent.
+Instead the output is saved up (buffered) until later when it is sent in one big chunk.
+This is called \emph{flushing}.
+In many cases, this is a good thing because it is more efficient.
+But if you want to ensure output has actually been sent, you can force the stream to be flushed by calling \texttt{fflush}.
+\begin{lstlisting}[numbers=none]
+FILE* f=fopen("message.txt", "r");
+if (!f) {
+    /* do something if file doesn't open */
+}
+/* some code */
+fprintf(f, "%s", "Greetings\n");
+fflush(f);
+/* more code */
+fclose(f);
+\end{lstlisting}
+
+\emph{Do not \emph{fflush} after every output statement} unless you have a good reason, it slows down your program.
+Streams are \texttt{fflush}ed automatically when files are \texttt{fclose}d or when a program exits normally.
+
+\hypertarget{disc:reversenums}{}Listing~\ref{lst:reversenums} contains an example program which reads integers from a file and then outputs them to another
+file in reverse order.
+To test this code (as well as entering and compiling it) you will need a text file with some integers (and whitespace) in it.
+Things to note in this code:
+\begin{itemize}
+ \item The use of \lstinline!fprintf(stderr, ! to display error messages.
+ \item Aside from the error messages, all input and ouput is done in terms of \texttt{FILE*} variables.
+ This makes the code more flexible, since it would be trivial to send output to (for example) standard out, just
+ by changing the argumens to \texttt{output\_nums}.
+ \item there are two versions of code to read the numbers from the file.
+ Switch between them by changing Line~65.
+ In both cases, since the function needs to return both the array of \texttt{int}s and howmany integers were
+ in the file, the count of values is sent back via a pointer.
+ The \texttt{read\_nums} function reads an int at a time and stores them in a dynamic array (keeping track both of how big the array is
+ and how many numbers are actually in it.
+ If the array fills up, a larger array is allocated, the old values are copied over and then the old array is \texttt{free}d.
+ For a slightly different approach to the resizing, see the documentation for the standard \texttt{realloc} function.
+ 
+ The \texttt{read\_nums\_presize} function tries to work out how big the array needs to be before allocating it (avoiding the need to resize).
+ It does this by reading through the whole file, counting numbers as it goes, then allocates an array, goes back to the beginning of the file
+ and reads all the numbers into the array.
+ This implementation is here to demonstrate the \texttt{fseek} function and because students often try to do something like this.
+ It certainly works in this case, but, this is an inferior method compared to the other one.
+ Firstly, not all things which look like files support seeking --- if one were to read from \texttt{stdin} instead of a disk file, then the seek would fail 
+ (you can't rewind \texttt{stdin} all the way back to the beginning).
+ Secondly, it is possible that the file could have been edited to add more numbers after your code counted them but before it finished reading them.
+ Thirdly, reading the whole file twice (for larger files) is inefficient.
+ Forthly, students may gravitate to this type of approach because it \emph{seems} simpler than resizing arrays rather than because they think it is a better approach.
+ 
+ \item Note that return values of functions are checked. 
+ Did the \texttt{fseek} call work? If not, there is no point continuing.
+ Did the \texttt{fscanf} actually manage to read anything.
+ We don't explicitly check for end of file, but that is covered by \texttt{fscanf} failures.
+ Possible failures in \texttt{fprintf}, \texttt{malloc}, \texttt{free} are not tested because 
+ (dealing with these failures is system specific / tricky).
+\end{itemize}
+
+
+\lstinputlisting[label=lst:reversenums, escapechar=@, caption=Reversing numbers]{file.c}

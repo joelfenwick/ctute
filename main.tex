@@ -1,0 +1,49 @@
+\documentclass[a4paper,10pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{hyperref}
+
+
+% This document (including sub files) is made available under 
+% Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+% Original document by Joel Fenwick - 2016
+% Contributions by Joel Fenwick are copyright by The University of Queensland
+% Additional authors added for non-trivial contributions
+
+
+% Design principles:
+%  * this is not intended to be a textbook - it is supposed to support lectures or other reasources
+%  * it is intended to be usable (if not optimal) as both a reference and as a tutorial
+%  * forward concept references are to be avoided.  If something is presented as an example which
+%    readers are supposed to learn from, then they should be able to understand everything in that example.
+%    That is not to say concept explanations can't be iterated/elaborated on later
+%  * System/environment specific details should be separated into their own files so they can be disabled/switched out.
+%  * Except for small fragments, hypreref link to programs so they can be placed elsewhere in the document/floated.
+%  * Only use widely available LateX packages --- distributed with or autodownload for most major LaTeX distributions.
+%    Think you need to add a class or package to this repo, please think again.
+%  * Content is to be restricted to standard-C99
+
+
+\newcommand{\todo}[1]{\textbf{#1}}
+
+\begin{document}
+
+\title{A C tutorial/refresher}
+\author{Joel Fenwick (editor)}
+
+\maketitle
+\lstset{language=C}
+\input{linuxenv}
+\input{firstprog}
+\input{firstoutput}
+\input{operators}
+\input{simpleinput}
+\input{simpletypes}
+\input{arraysandpointers}
+\input{functions}
+\input{structs}
+\input{fileio}
+\input{strings}
+\input{exercise1}
+\input{gloss}
+\end{document}

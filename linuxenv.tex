@@ -1,0 +1,99 @@
+
+\chapter{Commandline Linux environment --- gcc}
+
+The following assumes that you have access to a linux/posix/bsd commandline.
+This could either be a local terminal window on operating systems which support it or via an ssh program such as putty.
+We will assume you are using the \texttt{bash} shell and the \texttt{gcc} c compiler.
+
+\section{Creating source files}
+C source files can be created and edited using any plain text editor\footnote{Some tools (such as MacOS's TextEdit) can save formatting or not. Make sure you are using text only.}.
+For example nano or vim.
+Be aware that different operating systems have different ideas about what the end of a line looks like.
+For example, compiling a file on linux which has windows end of lines in it will lead to compile errors.
+With this in mind, try to edit on the same platform you will be compiling on (or failing that, use a tool which respects the target
+platform's line endings\footnote{For example, notepad++ can be set to act in this way.}
+
+Some systems have case-sensitive filenames and some have case insensitive (eg: \texttt{bob.c} is considered to be the same file as \texttt{Bob.C}.
+Regardless of your home system, you should try to use consistant cases.
+For \texttt{gcc}, C source files must end in \texttt{.c} (lower case) or later on \texttt{.h}.
+
+Put the following in a file called \texttt{test.c}
+\begin{lstlisting}
+int main()
+{
+    return 5
+}
+\end{lstlisting}
+
+Then compile it with the command:
+\begin{verbatim}
+gcc test.c 
+\end{verbatim}
+which will produce a message like:
+\begin{verbatim}
+test.c: In function ‘main’:
+test.c:4:1: error: expected ‘;’ before ‘}’ token
+ }
+ ^
+\end{verbatim}
+
+Now type:
+\begin{verbatim}
+echo $? 
+\end{verbatim}
+
+This asks the shell to tell you what happened with the previous command (its ``exit status'').
+By tradition, anything other than $0$ indicates some form of error.
+In this case, the compiler failed and \verb!$?! reflects that.
+Now edit \texttt{test.c} to add a semicolon after the $5$, then recompile.
+You should not see any messages.
+
+Look in the directory, and you should see a new file called \texttt{a.out}.
+This is the default name for programs made with \texttt{gcc}.
+Execute your program with:
+\begin{verbatim}
+./a.out 
+\end{verbatim}
+and check that the exit status was $5$.
+
+Depending on your requirements, you may need to comply with some particular version of the C language standard.
+Adding one of the following to your compile line will do this.
+
+\begin{tabular}{c|c}
+-ansi & C89/C90 \\
+-std=c99 & C 99 \\
+-std=gnu99 & C99 with some gnu extras\\
+\end{tabular}
+
+
+\section{Linking and other compile options}
+\texttt{gcc test.c} actually performs a number of phases including compiling and linking.
+The distinction between these is more important when a program's source consists of multiple 
+files.
+\begin{verbatim}
+gcc -c file1.c
+gcc -c file2.c
+gcc -c file3.c
+\end{verbatim}
+Would compile each of the files (and check them for correctness).
+Following that:
+\begin{verbatim}
+gcc file1.o file2.o file3.o 
+\end{verbatim}
+would ``link'' ie  combine the pieces together and check for consistancy and completeness.
+
+Adding \texttt{-Wall} and/or \texttt{-pedantic} will cause \texttt{gcc} to report more potential problems.
+\emph{This is a good thing.}
+
+\section{Other notes}
+It may seem obvious, but do not ignore error or warning messages.
+
+You can save error messages by adding \verb|2>errfilename| to the end of a command.
+For example:
+\begin{verbatim}
+gcc myfile.c 2>&1
+\end{verbatim}
+
+
+
+

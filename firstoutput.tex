@@ -1,0 +1,63 @@
+
+\chapter{Simple output and Command Line arguments}
+\lstset{numbers=left, showstringspaces=false, frame=l}
+
+
+Compile and run the following:
+\begin{lstlisting}
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    printf("Going to print some things %s%s%s\n");
+    return 0;
+}
+\end{lstlisting}
+
+Although you \emph{can} just print strings directly with printf, it isn't necessarily a good idea (as shown above)\footnote{\texttt{puts()} is probably a better option}.
+To understand why, we need to look at how \texttt{printf} deals with variables.
+Replace Line~$4$ with \lstinline!printf("%s\n", "Going to print some things %s%s%s ");!
+
+The first parameter of \texttt{printf}, describes what is to be printed, any sequence starting with \% is called a place holder and will be replaced with something else when the output is done.
+Characters after the \% indicate what type of thing is to be printed (and possibly how it is to be formatted).
+So \%s in the first argument tells \texttt{printf} that it should look at the next argument along, interpret it as a string and print it.
+If there aren't enough arguments, or the argument is the wrong type, unexpected things may occur.
+
+To print an integer instead of a string, use the \%d placeholder.
+For example: \lstinline!printf("%d + %d = %d\n", 5, 7, 12);!
+You can use any mixture of placeholders and normal characters in the \emph{format string} that you like.
+
+
+Compile the following:
+\begin{lstlisting}
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    printf("There were %d arguments given to the program %s\n",
+      argc, argv[0]);
+    return 0;
+}
+\end{lstlisting}
+Lines~4 and 5 show that you can break lines to improve layout and readability.
+Try running the program with a variety of command line arguments.
+You will see that \texttt{argv[0]}, contains the name of the program (\texttt{argv} stands for ``argument values") and that \texttt{argc} gives the ``argument count'' --- how many there were).
+Since the argv always has at least one thing in it, argc$\geq 1$ and accessing argv[0] should always be safe.
+But change the program to print argv[200] and see what happens.
+
+
+By using a conditional statement, we can safely print more if it is available.
+\begin{lstlisting}
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    printf("0: %s\n, argv[0]);
+    if (argc>1) {
+      printf("1: %s\n", argv[1]);    
+    }
+    if (argc>2) {
+      printf("2: %s\n", argv[2])
+    }
+    return 0;
+}
+\end{lstlisting}
+Some type of loop would be a better way to deal with this but we haven't got there yet.
+
