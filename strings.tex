@@ -1,2 +1,165 @@
 
 \chapter{Strings and String IO}
+
+
+\todo{Need to have concepts this section assumes:    chapters on arrays and files}
+
+So far, we have output strings (using the \%s placeholder) but apart from \texttt{argv} in main have avoided string variables and string input.
+Strings are stored in arrays of char, however in C you can ask how long a string is but not how big an array is.
+This is because strings use a special character with the numeric value $0$ (written as \verb!'\0'!) to mark the end of the string.
+So \lstinline!strlen("")==0! that is, the length of the empty string is zero.
+This also means that \lstinline!("")[0]=='\0'!.
+The \emph{null terminator} is not counted as part of the length of the string.
+
+
+For example:
+
+\begin{lstlisting}
+char single[2];
+single[0]='A';
+single[1]='\0';
+\end{lstlisting}
+
+would make \texttt{single}, the same as \verb!"A"!.
+Note the use of \verb!'! around characters and \verb!"! to mark strings.
+
+On the other hand,
+\begin{lstlisting}
+char single[2];
+single[0]='A';
+single[1]='B';
+\end{lstlisting}
+would not make \texttt{single} store \verb!"AB"!, rather it is not storing a proper string at all\footnote{It is actually worse than that.
+The most we can say, is that we can't tell whether single stores \texttt{"AB"} or not.
+This is because we don't know what follows the array in memory.
+If there just happened to be a zero byte next then, when the program looked in \texttt{single} it would see a proper string.
+}.
+Important note: while strings are stored in arrays of char, that does not mean all arrays of char store strings.
+
+Because strings are stored in arrays, it does not make sense to compare them with \texttt{==}.
+Instead, we use standard string functions from \lstinline{<string.h>}.
+Compile and run the following program:
+\begin{lstlisting}
+#include <string.h>
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    char msg[10];	
+    msg[2]='\0';
+    msg[0]='h';
+    msg[1]='w';
+    printf("strlen(%s)==%d\n", msg, strlen(msg));
+    printf("msg==\"hw\" -> %d, strcmp(msg,\"hw\")==%d\n", (msg=="hw"), strcmp(msg, "hw"));
+    return 0;
+}
+\end{lstlisting}
+
+In this case, both comparing with \texttt{==} and comparing with the string compare function (\texttt{strcmp}) both give zero/\lstinline!false!.
+However, we need to be clear about what \texttt{strcmp} returns.
+\begin{lstlisting}
+strcmp("B","A")==-1 // arguments are in reverse order
+strcmp("B","B")==0  // arguments are the same
+strcmp("A","B")==1  // arguments are in correct order
+\end{lstlisting}
+That is, strcmp returns \emph{0} if strings are the same.
+
+To copy strings, use \texttt{strcpy}:
+\lstinline{strcpy(buffer, "hello ");}
+String functions which modify a string, put the destination first.
+To add to an existing string, use \texttt{strcat} (string concatenate):
+\lstinline{strcat(buffer, "world");}
+After executing those two statements, \texttt{buffer} will contain \lstinline!"hello world"! \emph{provided that \texttt{buffer} was big enough}.
+If buffer was declared as \lstinline!char buffer[12]! or bigger then we are ok.
+If it was smaller (eg 2 chars), then the string functions would write off the end of the array and corrupt other variables or crash (possibly)\footnote{This possibly is the worst part.
+The program \emph{might} crash or it might look fine.
+The behaviour might change depending on which system you ran the program on.
+Undefined and unpredictable behaviour like this can be very hard to find and debug.}
+
+What if you want to put numbers into a string? 
+The simplest way is with \emph{s}\texttt{printf}:
+\begin{lstlisting}
+char buffer[20];
+sprintf(buffer, "%d + %d == %d", 3,5,3+5);
+\end{lstlisting}
+Will result in \texttt{buffer} storing \lstinline!"3 + 5 == 8"!.
+As with all standard functions which modify strings, \texttt{sprintf} will put a \lstinline!'\0'! on the end of the string it makes.
+There is also an \texttt{sscanf} to read values out of a string instead of from a \texttt{FILE*}.
+
+If you are making a string which will be passed outside the current function, it is better to use dynamic arrays:
+\begin{lstlisting}
+char* getMessage1(void) {
+    char* msg=malloc(sizeof(char)*11);
+    sprintf(msg, "%d + %d == %d", 3,5,3+5);
+    return msg;
+}
+
+char* getMessage2(void) {
+    char msg[11];
+    sprintf(msg, "%d + %d == %d", 3,5,3+5);
+    return msg;		// returning pointer to local variable
+}
+\end{lstlisting}
+
+\texttt{getMessage2} is dangerous because the memory used for array \texttt{msg} be used for other things once the function returns.
+Since \texttt{getMessage1} allocates it's memory is on the heap and so won't be reused until it is \texttt{free}d.
+
+How can we read in strings?
+You could use (f)scanf like this:
+\begin{lstlisting}
+char* buffer=malloc(sizeof(char)*5);
+fscanf(f, "%s", buffer); // read a string and store it in buffer
+\end{lstlisting}
+To read the user's response of \texttt{hello}.
+But there are some problems here:
+\begin{itemize}
+ \item The buffer array is big enough to hold the characters h-e-l-l-o, but not big enough to hold the end of string terminator.
+ \item So, increase the limit to 6. It will still be unstable if someone enters \texttt{greetings and saluations}.
+ \item Ok, make the fixed size buffer big enough to hold anything that could be entered.
+ This is (almost always) the wrong way to approach the problem\footnote{The exception is if you know that valid input can not be bigger than a known size.
+ Even then, you need to consider what happens if you are fed, \emph{invalid} input which is bigger.}.
+ 
+ For now though, let's change the size to 200 and enter \texttt{greetings and saluations}.
+ \item The string in \texttt{buffer} will be "greetings".  
+ This is because \texttt{\%s} as an input placeholder only reads up to the next whitespace, not a whole line.
+\end{itemize}
+
+So how should we read in strings in view of the fact that string operations do not check that there is enough room for the string?
+\emph{Carefully}.
+You can read a line of text using \texttt{fgets}:
+\begin{lstlisting}
+char buffer[81];
+char* result=fgets(buffer,81, stdio);
+if (!result) {
+   // we hit end of file
+} else {
+   // do something with the string
+}
+\end{lstlisting}
+The \texttt{fgets} function will read (up to) one less than the number you give it to leave room for the \lstinline!'\0'!.
+Note that if the line was longer than 80 characters, it won't all be read.
+
+The alternative is to read input a character at a time (possibly storing it in a string which you expand as needed) and then processing it.
+\begin{lstlisting}
+char* buffer=malloc(sizeof(char)*80);
+int c;
+do {
+    c=fgetc(file);
+    if (c!=EOF) {
+      // process c
+    }
+} while (c!=EOF);
+\end{lstlisting}
+Note that \texttt{fgetc} returns an \texttt{int} not a \texttt{char}.
+This is because it returns either a character \emph{or} the special extra value EOF.
+Forgetting this leads to bugs.
+
+\section*{String summary}
+\begin{itemize}
+ \item Strings are stored in \texttt{char} arrays and must be terminated properly.
+ \item Standard functions will take care of \lstinline!'\0'! for you. In your own code, you need to look after it.
+ \item C won't check that the underlying storage is big enough.
+ \item \texttt{strlen(s)} --- length of \texttt{s}.
+ \item \texttt{strcpy(d,s)} --- make \texttt{d} a copy of \texttt{s}
+ \item \texttt{strcat(d,s)} --- copy \texttt{s} onto the end of \texttt{d}.
+ \item \texttt{fgets} and \texttt{fgetc} are your freinds.
+\end{itemize}

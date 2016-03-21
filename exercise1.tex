@@ -2,3 +2,42 @@
 \chapter{Exercises}
 
 % Need to decide what sort of put in here
+
+
+\section*{Strings}
+
+\begin{enumerate}
+\item
+Write a function called \texttt{mystrlen} which does the same job as the standard \texttt{strlen} function.
+You are not permitted to call any standard C string functions.
+
+Test it with the following:
+\begin{lstlisting}[numbers=none]
+#include <stdio.h>
+
+// your code here
+
+int main(int argc, char** argv) {
+    if ((mystrlen("hello")==5) && (mystrlen("")==0)) {
+        printf("Ok\n");
+    } else {
+        printf("No\n");
+    }
+    return 0;
+}
+\end{lstlisting}
+
+\item Write your own version of \texttt{strcpy} (mystrcpy) which does the same job.
+You are not permitted to call any standard C string functions.
+Write a test program to demonstrate your function is correct.
+
+\item Write a function \lstinline!char* stringadd(const char* s1, const char* s2)! which takes two strings and 
+returns a new string which contains \texttt{s1} followed by \texttt{s2}.
+You are not permitted to call any standard C string functions.
+Write a test program to confirm that your function is correct.
+
+\item Write a function which reads a line of any length from a file, and returns it as a string.
+You are not permitted to use \texttt{fgets}.
+Write a test program to confirm that your function is correct.
+ 
+\end{enumerate}
