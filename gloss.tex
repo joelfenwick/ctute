@@ -2,6 +2,11 @@
 \chapter*{Glossary}
 
 \begin{description}
+ \item[\hypertarget{defn:argument}{Argument}] a value supplied to a function to tell it what it should be doing.
+ For example (if \texttt{sqrt} computes square roots, then in \lstinline{sqrt(36)}, $36$ is an argument but the same function
+ could be called later with a different argument.
+ 
+ Note that arguments are distinct from the names given to the variables the arguments are stored in inside the function (see \hyperlink{defn:parameter}{Parameters}).
  \item[\hypertarget{defn:array}{Array}] A variable, which contains multiple values intead of just one. 
  Individual values are accessed by their \texttt{index} within the array.
  In most C derived langages this is indicated with brackets.
@@ -10,6 +15,13 @@
     
  In C, all the values have the same type and the size of the array is fixed 
  when it is created.
+ 
+ \item[\hypertarget{defn:parameter}{Parameter}] A piece of information which a function needs in order to do it's job.
+ For example: the function for computing a square root could be declared as:
+ \lstinline!double sqrt(double x)!.
+ In order to work, the function needs to know which number it should be taking the square root of.
+ In this case, that information will be stored in a variable called \texttt{x}.
+ Note that parameters are distinct from \hyperlink{defn:argument}{Argument}s which are the values given in a specific call.
  
  \item[\hypertarget{defn:string}{String}] A sequence of characters which can be manipulated as a unit.
  In C dervied languages, they are usually written in code surrounded by double quotes\footnote{The widley known exception 

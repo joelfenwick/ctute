@@ -49,7 +49,7 @@ By using a conditional statement, we can safely print more if it is available.
 #include <stdio.h>
 
 int main(int argc, char** argv) {
-    printf("0: %s\n, argv[0]);
+    printf("0: %s\n", argv[0]);
     if (argc>1) {
       printf("1: %s\n", argv[1]);    
     }
@@ -59,5 +59,63 @@ int main(int argc, char** argv) {
     return 0;
 }
 \end{lstlisting}
-Some type of loop would be a better way to deal with this but we haven't got there yet.
+Some type of loop would be a better way to deal with this so let's do that now.
 
+\section{Loops}
+A loop consists of the following parts (some of which may be empty):
+\begin{itemize}
+ \item [Setup] --- happens once (before the loop starts).
+ \item [Test]  --- should the loop repeat or stop now?
+ \item [Body]  --- what the loop is supposed to do each time.
+ \item [Update] --- happens after the body runs each time.
+\end{itemize}
+
+So to display command line arguments:
+\begin{itemize}
+ \item [Setup] --- set a counter variable (\texttt{i}) to 0.
+ \item [Test]  --- is \texttt{i} less than \texttt{argc}
+ \item [Body]  --- print the argument
+ \item [Update] --- increase \texttt{i}
+\end{itemize}
+
+C has three types of loop structure:
+
+The \emph{for} loop
+\begin{lstlisting}
+for (Setup ; Test ; Update) {
+    Body
+}
+\end{lstlisting}
+
+The \emph{while} loop
+\begin{lstlisting}
+Setup
+while (Test) {
+    Body
+    Update
+
+}
+\end{lstlisting}
+
+and the \emph{do-while} loop
+\begin{lstlisting}
+Setup
+do {
+    Body
+    Update
+} while(Test);
+\end{lstlisting}
+
+So we could do this:
+\begin{lstlisting}
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    for (int i=0;i<argc; i=i+1) {
+        printf("%d: %s\n", i, argv[i]);
+    }
+    return 0;
+}
+\end{lstlisting}
+
+As an exercise, rewrite the above to use \texttt{while} and then to use \texttt{do-while}.
