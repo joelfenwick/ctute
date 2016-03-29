@@ -1,2 +1,160 @@
 
 \chapter{Functions and Passing types}
+
+A function declaration in C consists of a return type, a function name and a parameter list.
+For example:
+\lstinline!int main(int argc, char** argv)!
+A function definition, has that information followed by a function body. 
+If no body is given, the declaration should be followed by a semi-colon.
+
+So \lstinline!void show_greeting(void);!  is just a declaration.
+It tells the compiler that the \texttt{show\_greeting} function exists but not how to do it.
+\begin{lstinline}
+void show_greeting(void) {
+    printf("Hello\\n");
+}
+\end{lstinline}
+Is a definition (which also counts as a declaration).
+
+Unlike many other languages, to tell the compiler that a function has no parameters, you 
+need to write \lstinline!(void)! for the parameter list instead of just \lstinline!()!.
+A return type of \lstinline!void! means that the function does not return anything.
+
+If a function has parameters, then the type of each parameter needs to be given explictly.
+As opposed to declaring normal variables, where you can do this: \lstinline!int i,j,k!.
+
+For example, the following function returns the maximum of two integers.
+\begin{lstlisting}
+int maximum(int a, int b) {
+    if (a < b) {
+        return b;
+    } else {
+        return a;
+    }
+}
+\end{lstlisting}
+
+Exercise: Write a function which \emph{returns} the maximum of three integers and a program to test it.
+
+Enter and compile the following:
+\begin{lstlisting}
+#include <stdio.h>
+
+void swap(int p, int q) {
+    int temp;
+    printf("p=%d q=%d\n", p, q);
+    temp=p;
+    p=q;
+    q=temp;
+    printf("p=%d q=%d\n", p, q);
+}
+
+int main(int argc, char** argv) {
+    int a=3, b=4;	// variables can be initialised as they are declared.
+    swap(a,b);
+    printf("a=%d b=%d\n", a, b);
+    return 0;
+}
+\end{lstlisting}
+
+Note that the paramters listed for the swap function are called \texttt{p} and \texttt{q} but the arguments passed to
+the function when it is called are from variables \texttt{a} and \texttt{b}.
+This does not matter. 
+There is no relationship between parameter names (used inside a function) and the names used to pass arguments into 
+the function.
+If we had named the parameters \texttt{a} and \texttt{b}, that would not make a link between the variables inside \texttt{swap} 
+and inside \texttt{main}.
+
+Bear in mind that even though the compiler doesn't pay any notice if the variables are the same, people might.
+Try to avoid switching variable names around for no reason.
+
+When you have run the above program, you will notice that it doesn't seem to work.
+The variables in \texttt{main} still have their original values.
+However, \texttt{p} and \texttt{q} seemed to have swapped over just fine.
+
+The reason for this is that arguments to C functions are passed \emph{by value}.
+That is, the \emph{value} of each argument is copied into the paramter variables inside the function.
+So, the function swaps values in variables but that doesn't change anything outside of the function.
+
+To demonstrate this further, try changing the swap call to \lstinline!swap(2, (5*7)-6)!.
+
+To allow functions to modify their arguments, the you need use \emph{pass by reference} which C doesn't really have.
+Instead we make use of \emph{pointers}.
+A pointer is not a way to refer to memory by its address rather than by variable name.
+You can get the address of any variable using the \lstinline!&! operator.
+So \lstinline!&length! gives a pointer to the \texttt{length} variable.
+
+Now for the fun part.
+Pointers are values as well and can be stored in variables.
+\lstinline!int pl=&length! won't work though because \lstinline!&length! isn't an \texttt{int}\footnote{Yes, technically underneath it is an unsigned integer value of some type (probably \texttt{unsigned long}).
+But it is more helpful for programmers when the compiler can notice that this wasn't supposed to be a normal number.}, 
+it is a \emph{pointer-to-\texttt{int}} (or an \emph{\texttt{int}-pointer}, the names are equivalent).
+
+In C, pointers are declared by writing \texttt{*} between the type-being-pointed-to and the name.
+\begin{lstlisting}
+int* lp; // ok but a meaningful name would be better
+int* lpointer; // longer but not necessarily any more meaningful
+int* i, j;   // Warning: this does not mean what you think
+int *k;	// the * can also go against the variable name
+int*p;	// also legal. C doesn't care about spaces here
+int * q; // Now you're just being silly. (Still legal though).
+\end{lstlisting}
+The last two lines are examples of legal code which is unnecessarily hard to read.
+Remember that people (including you) will need to read your code later and you don't want that to be difficult.
+
+Line~3 illustrates a tricky part of pointer declarations.
+Regardless of where you put the \texttt{*}, only the next variable name will be a pointer.
+So, Line~3 declares \texttt{i} to be a pointer to an \texttt{int} and \texttt{j} to be an ordinary (non-pointer) \texttt{int}.
+
+Important note:
+there is no compelling argument as to which \texttt{*} position is more correct (\texttt{int* x} or \texttt{int *x}).
+Lot's of people will try to tell you that there is though.
+It is more important that you use a form which you are comfortable with and (perhaps more importantly) is consistant with 
+the rest of the code you are writing.
+Most importantly, you need to conform with whatever style rules are in force for your organisation.
+
+Modify the swap declaration to be:
+\lstinline!void swap(int* p, int* q)!
+and try to compile.
+
+The problem is that the function now expects pointers and we are passing in \texttt{int}s.
+So change the swap \emph{call} to \lstinline!swap(&a,&b);!.
+This means that the function expects pointers and we are giving it pointers.
+The code inside the function is not right yet though.
+Line~3 tries to print out the paramters but we don't care what the addresses of the variables are, we want to know what is
+at the end of the pointers.
+Remember that these pointers are pointing at \texttt{a} and \texttt{b} and we want to swap what is in \texttt{a} and \texttt{b}.
+So we need the \emph{dereference} (follow-the-pointer) operator.
+This is a \texttt{*} before the pointer.
+Line~3 would become:
+\lstinline!printf("p=%d q=%d\n", *p, *q);!
+
+In fact, all the other references to \texttt{p} and \texttt{q} need to be changed to \texttt{*p} and \texttt{*q}.
+Compile and run to see if it worked.
+
+So what happened here?
+Suppose \texttt{a} and \texttt{b} are stored in locations \lstinline{xFFFF0000} and \lstinline{xFFFF0008} respectively.
+\begin{itemize}
+ \item \lstinline{swap(&a, &b)} will become \lstinline{swap(xFFFF0000, xFFFF0008);}.
+ \item Those pointer \emph{values} will be \emph{copied} into the function variables \texttt{p} and \texttt{q}.
+ \item \lstinline!temp=*p! would become \lstinline!temp=*(xFFFF0000)! ie \texttt{temp=} the value stored at location 
+ \lstinline!xFFFF0000!.  That is, \lstinline!temp=3;!
+\end{itemize}
+
+So, the pointers were passed by value (copied) but a copy of a pointer is just as good at accessing the original thing.
+
+Main points to remember:
+\begin{enumerate}
+ \item If you want to change something outside a function from inside the function, you may need to use a pointer.
+ \item Pointers have two ends. eg \lstinline!int* fred!.   \texttt{fred} is the pointer and \texttt{*fred} is the thing 
+ being pointed at.
+ \item Pointers to different types of things are different. \texttt{int* c} and \texttt{char* i} are not the same type of thing.
+ \item There is a special pointer written as \texttt{NUL} or \texttt{0} which points to nothing.
+ Trying to follow a \emph{null pointer} leads to sadness.
+\end{enumerate}
+
+
+
+
+
+
