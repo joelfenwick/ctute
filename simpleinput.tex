@@ -3,5 +3,87 @@
 
 %This will deal with reading in whatever types we have already seen
 %Reading in chars should first deal with getchar before moving on to string functions.
+%Strike that, deal with scan here.
 %probably need a loop or two to do this, which constrains ordering (or we split it up ---
 % start with integers only and deal with failure to read later?)
+
+Values can be read from the user with \texttt{scanf}.
+This function is quite powerful and we won't deal with all its capabilities here.
+
+A  call to \texttt{scanf} function looks a bit like a \texttt{printf} call:
+\begin{lstlisting}
+void get_and_print(void) {
+    int x;
+    scanf("%d", &x);
+    printf("%d\n", x);
+}
+\end{lstlisting}
+Like \texttt{printf}, \texttt{scanf} takes a string with placeholders and some variables\footnote{Actually any expression which evaluates to a pointer will do but let's keep it simple.}.
+The difference is that the variables are pointers to the variables and we are storing into the variables
+rather than reading from them.
+
+The types (and number of) placeholders must match the type of pointers given the argument list.
+For example:
+\begin{lstlisting}
+char c;
+scanf("%d",&c); 
+\end{lstlisting}
+--- storing an \texttt{int} into a \texttt{char} is a bad idea.
+Since \texttt{int}s are bigger than \texttt{char}s additional memory ``outside'' \texttt{c} and possibly overwrite 
+other variables.
+
+Compile and run the following program:
+\begin{lstlisting}
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    int number;
+    do {
+        printf("Enter a number: "); 
+        scanf("%d", &number);
+        printf("Number was %d\n", number);
+    } while (number!=0);
+    return 0;
+}
+\end{lstlisting}
+Enter a few numbers, you don't need to press enter after each number, but you will need an enter before the program 
+takes notice of your input.
+Enter a zero to finish.
+
+Note: make sure you know how to stop a running program before going on.
+
+To see a problem with this program, run the program again and give the following input:
+\texttt{1 2 z6}
+
+Stop the program.
+The problem is that \texttt{scanf} was told to read an integer but it saw the \texttt{z} character.
+Because it couldn't make an integer from that, it failed.
+But it didn't get rid of the \texttt{z} either, so when the loop ran again, \texttt{z} was still there.
+Hence the infinite loop you saw.
+When you use functions, you should (if possible) check to see if it worked.
+\texttt{scanf} will return the number of variables it managed to read correctly.
+So in this case, if the input succeeded, we would expect a return value of $1$.
+Replace the \texttt{scanf} call with:
+\begin{lstlisting}
+    if (scanf("%d", &number)==1) {
+       printf("Number was %d\n", number); 
+    } else {
+       number=0;	// trigger the end of the loop
+    }
+\end{lstlisting}
+
+Recompile the program and try the same sequence of input.
+
+To read other types of variables, the placeholders are generally similar to the ones used by \texttt{printf}.
+An important exception are floating point values.
+Use \texttt{\%e} for \texttt{float}s and \texttt{\%le} for \texttt{double}s.
+
+
+There are four main things to think about when using \texttt{scanf}:
+\begin{enumerate}
+ \item Use the correct placeholder for the type you wish to read.
+ \item Pass pointers to the variables you wish to store in.
+ \item Be sure to check to see if \texttt{scanf} actually succeeded
+ before using its results.
+ \item Remember that bad input does not disappear automatically.
+\end{enumerate}

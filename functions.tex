@@ -151,10 +151,19 @@ Main points to remember:
  \item Pointers to different types of things are different. \texttt{int* c} and \texttt{char* i} are not the same type of thing.
  \item There is a special pointer written as \texttt{NUL} or \texttt{0} which points to nothing.
  Trying to follow a \emph{null pointer} leads to sadness.
+ \item Just like other variables in C, pointer variables are not guaranteed to be initialised.
+ That is, they do not point anywhere sensible unless you tell them to.
 \end{enumerate}
 
 
+Exercise: suppose you have 3 variables \texttt{a, b, c}.
+Write a function which you can use to switch the values around so that 
+\texttt{a} takes the value of \texttt{b}, \texttt{b} takes \texttt{c}
+and \texttt{c} takes the original value of \texttt{a}.
 
+So, if \lstinline{a=0, b=1, c=2} before the call, then after the call:
+\lstinline{a=1, b=2, c=0}.
+Write a program to test your function.
 
 
 
