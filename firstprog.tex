@@ -1,6 +1,5 @@
 
 \chapter{First program}
-\lstset{numbers=left, showstringspaces=false, frame=l}
 
 \todo{Need to have concepts this section assumes:    strings and arrays.}
 
@@ -16,15 +15,15 @@ int main(int argc, char** argv) {
 \end{lstlisting}
 
 \begin{itemize}
- \item[1] \lstinline!#include! is a ``preprocessor directive''\footnote{as opposed to a C statement or declaration} which tells gcc to 
+ \item[1] \lstinline!#include! is a ``preprocessor directive''\footnote{as opposed to a C statement or declaration} which tells \texttt{gcc} to 
  consult another file before going any further.  If you remove this line, you will see that \texttt{printf} becomes a problem.
  This is because the \texttt{stdio.h} file is what tells \texttt{gcc} about the \texttt{printf} function.
  
- The $<>$ around the \texttt{stdio.h} indicate that it is a system include rather than a header we created ourselves\footnote{
- More accurately, $<>$ indicate which paths the compiler should look for the file in.}.
+ The \texttt{<>} around \texttt{stdio.h} indicate that it is a system include rather than a header we created ourselves\footnote{
+ More accurately, \texttt{<>} indicate which paths the compiler should look for the file in.}.
  For our own headers, put the filename in double quotes.
  
- \item[3] begins a function definition\footnote{A definition tells the compiler both that the function exists(called declaration), and what the function does}.
+ \item[3] begins a function definition\footnote{A definition tells the compiler both that the function exists(called declaration), and what the function does.}.
  All standard C programs must have a function called \texttt{main}.
  Unless your system has special requirements, you should use the signature\footnote{A function's signature gives the function's name, its return type and the type and order of parameters.} shown here.
  We have not discussed types yet (we'll look at types in See Item~???) but for now, \texttt{int} is an 
@@ -40,6 +39,6 @@ int main(int argc, char** argv) {
  So this line passes a string to the \texttt{printf} function.
  
  \item[5] indicates which value the function returns/sends back to its caller.
- For main, the return value is sent back to the operating system as the program's exit status.
+ For \texttt{main}, the return value is sent back to the operating system as the program's exit status.
 \end{itemize}
 

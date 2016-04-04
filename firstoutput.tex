@@ -1,6 +1,5 @@
 
 \chapter{Simple output and Command Line arguments}
-\lstset{numbers=left, showstringspaces=false, frame=l}
 
 
 Compile and run the following:
@@ -17,7 +16,7 @@ Although you \emph{can} just print strings directly with printf, it isn't necess
 To understand why, we need to look at how \texttt{printf} deals with variables.
 Replace Line~$4$ with \lstinline!printf("%s\n", "Going to print some things %s%s%s ");!
 
-The first parameter of \texttt{printf}, describes what is to be printed, any sequence starting with \% is called a place holder and will be replaced with something else when the output is done.
+The first parameter of \texttt{printf}, describes what is to be printed, any sequence starting with \% is called a placeholder and will be replaced with something else when the output is done.
 Characters after the \% indicate what type of thing is to be printed (and possibly how it is to be formatted).
 So \%s in the first argument tells \texttt{printf} that it should look at the next argument along, interpret it as a string and print it.
 If there aren't enough arguments, or the argument is the wrong type, unexpected things may occur.
@@ -59,7 +58,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 \end{lstlisting}
-Some type of loop would be a better way to deal with this so let's do that now.
+Some type of loop would be a better way to deal with this, so let's do that now.
 
 \section{Loops}
 A loop consists of the following parts (some of which may be empty):
@@ -93,7 +92,6 @@ Setup
 while (Test) {
     Body
     Update
-
 }
 \end{lstlisting}
 
@@ -111,7 +109,7 @@ So we could do this:
 #include <stdio.h>
 
 int main(int argc, char** argv) {
-    for (int i=0;i<argc; i=i+1) {
+    for (int i = 0; i < argc; i = i + 1) {
         printf("%d: %s\n", i, argv[i]);
     }
     return 0;

@@ -63,9 +63,9 @@ This is because storing a value in a variable does not influence the way the exp
 If an expression contains a mixture of types, its arguments will be converted to the most general type.
 For example:
 \texttt{2/3.0} will give a floating point result because one of its arguments is floating point\footnote{Somewhat confusingly, the default floating point type in C is \texttt{double} not \texttt{float}.}
-You could also achieve this with a \emph{cast} \texttt{2/float(3)} or multiplication \texttt{(1.0*2)/3}.
+You could also achieve this with a \emph{cast}: \texttt{2/float(3)} or multiplication \texttt{(1.0*2)/3}.
 
- \item Signed vs Unsigned --- integer types can be restricted to store only postive values\footnote{and therefore store higher maxiumum values using the same number of bits because the sign bit can be used for value storage.}
+ \item Signed vs Unsigned --- integer types can be restricted to store only positive values\footnote{and therefore store higher maximum values using the same number of bits because the sign bit can be used for value storage.}
  For example: \texttt{unsigned int}, \texttt{unsigned char}\footnote{\texttt{int} defaults to \texttt{signed int} but if you care whether your \texttt{char}s are signed or unsigned, it is better to be explicit.}
  
  \item size --- types can be modified to indicate how much memory they take\footnote{In C, these modifications are not absolutely defined in the standard.}. 
@@ -103,7 +103,7 @@ These operators act on the individual bits in the value.
 These return a boolean value \texttt{true} or \texttt{false}.
 Remember that in C, \texttt{bool}s are also integer values.
 
-\lstinline|a<b, a<=b, a>b, a>=b, a!=b, a==b|.
+\lstinline|a < b, a <= b, a > b, a >= b, a != b, a == b|.
 Be careful comparing floating point values, since numerical errors can 
 creep in\footnote{A better option for \texttt{a==b} is to check if the difference is small 
 enough. $|a-b|<tolerance$ $\Rightarrow$ \lstinline!fabs(a-b)<0.0002!}.
@@ -111,15 +111,15 @@ enough. $|a-b|<tolerance$ $\Rightarrow$ \lstinline!fabs(a-b)<0.0002!}.
 \section{Logical operators}
 These look like their bitwise counterparts so it is important not to mix them up.
 \begin{itemize}
- \item \lstinline!a&&b! --- logical \emph{and}. eg: \lstinline!true && true == true!
- \item \lstinline!a||b! --- logical \emph{or}. eg: \lstinline!false || true == true!
+ \item \lstinline!a && b! --- logical \emph{and}. eg: \lstinline!true && true == true!
+ \item \lstinline!a || b! --- logical \emph{or}. eg: \lstinline!false || true == true!
  \item \lstinline|!a|   --- logical \emph{not}. eg: \lstinline@!(a||b) == (!a && !b)@  (deMorgan's law)
 \end{itemize}
 
 
 \section{Other operators}
 
-The folowing are also operators in C but we won't talk about them here.
+The following are also operators in C but we won't talk about them here.
 
 \begin{itemize}
  \item unary \texttt{*} for pointers (as opposed to arithmetic)
