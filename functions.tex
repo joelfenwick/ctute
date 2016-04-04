@@ -4,7 +4,7 @@
 A function declaration in C consists of a return type, a function name and a parameter list.
 For example:
 \lstinline!int main(int argc, char** argv)!
-A function definition, has that information followed by a function body. 
+A function definition has that information followed by a function body. 
 If no body is given, the declaration should be followed by a semi-colon.
 
 So \lstinline!void show_greeting(void);!  is just a declaration.
@@ -50,14 +50,14 @@ void swap(int p, int q) {
 }
 
 int main(int argc, char** argv) {
-    int a=3, b=4;	// variables can be initialised as they are declared.
+    int a=3, b=4; // variables can be initialised as they are declared
     swap(a,b);
     printf("a=%d b=%d\n", a, b);
     return 0;
 }
 \end{lstlisting}
 
-Note that the paramters listed for the swap function are called \texttt{p} and \texttt{q} but the arguments passed to
+Note that the parameters listed for the swap function are called \texttt{p} and \texttt{q} but the arguments passed to
 the function when it is called are from variables \texttt{a} and \texttt{b}.
 This does not matter. 
 There is no relationship between parameter names (used inside a function) and the names used to pass arguments into 
@@ -73,7 +73,7 @@ The variables in \texttt{main} still have their original values.
 However, \texttt{p} and \texttt{q} seemed to have swapped over just fine.
 
 The reason for this is that arguments to C functions are passed \emph{by value}.
-That is, the \emph{value} of each argument is copied into the paramter variables inside the function.
+That is, the \emph{value} of each argument is copied into the parameter variables inside the function.
 So, the function swaps values in variables but that doesn't change anything outside of the function.
 
 To demonstrate this further, try changing the swap call to \lstinline!swap(2, (5*7)-6)!.
@@ -94,9 +94,9 @@ In C, pointers are declared by writing \texttt{*} between the type-being-pointed
 \begin{lstlisting}
 int* lp; // ok but a meaningful name would be better
 int* lpointer; // longer but not necessarily any more meaningful
-int* i, j;   // Warning: this does not mean what you think
-int *k;	// the * can also go against the variable name
-int*p;	// also legal. C doesn't care about spaces here
+int* i, j; // Warning: this does not mean what you think
+int *k; // the * can also go against the variable name
+int*p; // also legal. C doesn't care about spaces here
 int * q; // Now you're just being silly. (Still legal though).
 \end{lstlisting}
 The last two lines are examples of legal code which is unnecessarily hard to read.
@@ -108,8 +108,8 @@ So, Line~3 declares \texttt{i} to be a pointer to an \texttt{int} and \texttt{j}
 
 Important note:
 there is no compelling argument as to which \texttt{*} position is more correct (\texttt{int* x} or \texttt{int *x}).
-Lot's of people will try to tell you that there is though.
-It is more important that you use a form which you are comfortable with and (perhaps more importantly) is consistant with 
+Many people will try to tell you that there is though.
+It is more important that you use a form which you are comfortable with and (perhaps more importantly) is consistent with 
 the rest of the code you are writing.
 Most importantly, you need to conform with whatever style rules are in force for your organisation.
 
@@ -121,7 +121,7 @@ The problem is that the function now expects pointers and we are passing in \tex
 So change the swap \emph{call} to \lstinline!swap(&a,&b);!.
 This means that the function expects pointers and we are giving it pointers.
 The code inside the function is not right yet though.
-Line~3 tries to print out the paramters but we don't care what the addresses of the variables are, we want to know what is
+Line~3 tries to print out the parameters but we don't care what the addresses of the variables are, we want to know what is
 at the end of the pointers.
 Remember that these pointers are pointing at \texttt{a} and \texttt{b} and we want to swap what is in \texttt{a} and \texttt{b}.
 So we need the \emph{dereference} (follow-the-pointer) operator.
@@ -149,7 +149,7 @@ Main points to remember:
  \item Pointers have two ends. eg \lstinline!int* fred!.   \texttt{fred} is the pointer and \texttt{*fred} is the thing 
  being pointed at.
  \item Pointers to different types of things are different. \texttt{int* c} and \texttt{char* i} are not the same type of thing.
- \item There is a special pointer written as \texttt{NUL} or \texttt{0} which points to nothing.
+ \item There is a special pointer written as \texttt{NULL} or \texttt{0} which points to nothing.
  Trying to follow a \emph{null pointer} leads to sadness.
  \item Just like other variables in C, pointer variables are not guaranteed to be initialised.
  That is, they do not point anywhere sensible unless you tell them to.
