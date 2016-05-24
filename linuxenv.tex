@@ -49,12 +49,19 @@ Now edit \texttt{test.c} to add a semicolon after the $5$, then recompile.
 You should not see any messages.
 
 Look in the directory, and you should see a new file called \texttt{a.out}.
-This is the default name for programs made with \texttt{gcc}.
+This is the default name for programs made with \texttt{gcc}. The name can be changed
+by using the ``-o'' option. 
+
+\begin{verbatim}
+gcc test.c -o test
+\end{verbatim}
+Would produce an output file named test.
+\\
 Execute your program with:
 \begin{verbatim}
 ./a.out 
 \end{verbatim}
-and check that the exit status was $5$.
+and check that the exit status was $5$ as exepected. When c program returns from main its ``exit status'' is the value returned.
 
 Depending on your requirements, you may need to comply with some particular version of the C language standard.
 Adding one of the following to your compile line will do this.
