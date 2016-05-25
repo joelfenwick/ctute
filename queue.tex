@@ -1,0 +1,180 @@
+
+\chapter{Linked Queue}
+
+\todo{Need to have concepts this section assumes:    chapters on dynamic arrays}
+
+In this chapter, we'll look at using structs and dynamic memory to make a linked implementation of a queue data type.
+A queue is a data structure (sometimes called a FIFO\footnote{\textbf{F}irst \textbf{I}n \textbf{F}irst \textbf{O}ut}) 
+where the first item added to the queue is the first one which will come out of the queue.
+Contrasted with a stack where the next item to come off the stack is the most recently added.
+
+For this example, we'll make our queue store \texttt{int}s.
+
+\begin{lstlisting}
+struct queue_node {
+    int data;
+    struct queue_node* next;
+};
+\end{lstlisting}
+
+Here we have started to define a struct and put a pointer to another struct of the same type inside it.
+This is legal in C because as soon the compiler sees \texttt{struct queue\_node}, it will accept mentions of \texttt{struct queue\_node}
+as a type. However, while we can do the above, we can't do this:
+
+\begin{lstlisting}
+struct queue_node {
+    int data;
+    struct queue_node next;
+};
+\end{lstlisting}
+That is, declarare a struct which contains itself (note the lack of pointer).
+\footnote{The compiler won't let you actually declare a variable of a 
+struct type until it can work out how big it is (which it doesn't know until the closing \}).}
+
+
+
+Using this we can have no items in the queue:
+\lstinline!struct queue_node* q=0;!
+one item in the queue:
+\begin{lstlisting}
+q=malloc(sizeof(struct queue_node));
+q->data=7;
+\end{lstlisting}
+or more than multiple items:
+\begin{lstlisting}
+struct queue_node* t=malloc(sizeof(struct queue_node));
+t->data=8;
+q->next=t;
+\end{lstlisting}
+all via a single pointer variable.
+In this case: \lstinline!q->data==7! and \lstinline!q->next->data==8!.
+
+\begin{center}
+\scalebox{0.5}{\includegraphics[trim={2.0cm 20.0cm 2.0cm 1.0cm},clip]{queue}}
+\end{center}
+
+\todo{Important advice:  drawing pictures is very helpful here. If you are unsure about any code involving pointers, draw a picture.}
+
+If we were sure that the queue had at least 4 items in it, we could write \lstinline!q->next->next->next->data!.
+This brings up an important point.
+It is critical that the end of linked data structures be properly indicated.
+In this case setting the \texttt{next} member to \texttt{0}.
+If this ``invariant'' is preserved, you could output all the items in a queue like this:
+\begin{lstlisting}
+struct queue* t=q;
+while (t!=0) {
+    printf("%d\n", t->data);
+    t=t->next;
+}
+\end{lstlisting}
+
+\todo{instruction: stop and make sure you understand exactly what the above does.}
+
+There a number of different visual conventions for indicating a null pointer and it probably doesn't 
+matter too much which one you use provided you are consistant. 
+Here are some examples:
+
+\begin{center}
+\scalebox{0.5}{\includegraphics[trim={2.0cm 20.0cm 2.0cm 4.0cm},clip]{nullptr}}
+\end{center}
+
+
+
+Now we'll add a nicer interface around the queue\_node to make it easier to use.
+
+\begin{lstlisting}
+struct queue {
+    struct queue_node* head;
+    struct queue_node* tail;
+};
+\end{lstlisting}
+
+As an optional feature, we could use a \texttt{typedef} to shorten the name.
+\begin{lstlisting}
+typedef struct queue queue;
+\end{lstlisting}
+
+Since the queue involves memory allocation, we should have setup and teardown/cleanup functions.
+\begin{lstlisting}
+void init_queue(queue* q);
+void free_queue(queue* q);
+\end{lstlisting}
+The \lstinline!init_queue()! function assumes that you have already has a queue struct but that it has not been initialised yet.
+\begin{lstlisting}
+queue q;
+init_queue(&q);
+\end{lstlisting}
+
+As an alternative, you could have a function which allocates a queue as well: \lstinline!queue* alloc_queue()!.
+Other functions we will need are:
+\begin{lstlisting}
+void add_queue(queue* q, int i);
+int get_queue(queue* q);
+\end{lstlisting}
+
+Notice that this interface doesn't mention malloc even though we know it will be using it.
+Let's provide the implementation for these functions.
+\begin{lstlisting}
+void init_queue(queue* q) {
+    q->head=0;
+    q->tail=0;
+}
+
+void free_queue(queue* q) {
+    struct queue_node* t=q->head;
+    while (t!=0) {
+        struct queue_node* temp=t;	// we need this so we can free it
+        t=t->next;			// after t has moved on
+        free(temp);
+    }
+}
+\end{lstlisting}
+
+We will add new elements to the end (tail) of the queue and remove items from the front (head) of the queue.
+\begin{lstlisting}
+void add_queue(queue* q, int d) {
+    if (q->head==0) {		// don't forget the special case of an empty queue
+        q->tail=q->head=malloc(sizeof(struct queue_node));
+        q->head->next=0;
+    } else {
+	struct queue_node* n=malloc(sizeof(struct queue_node));
+	n->next=0;
+	q->tail->next=n
+	q->tail=n;
+    }
+    q->tail->dat=d;
+}
+
+int get_queue(queue* q) {
+	// check for empty queue first
+    if (q->head==0) {
+	  // what to do here??
+	return 0;
+    }
+    int result=head->data;
+    struct queue_node* temp=q->head;
+    q->head=q->head->next;
+    free(temp);
+      // now we need to check if we have emptied the queue
+    if (q->head==0) {
+        q->tail=0;
+    }
+    return result;
+}
+
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+\section*{Queue summary}
+\begin{itemize}
+ \item Use structs to carry around all the related variables for a type.
+ \item Write setup and cleanup functions for your struct first.
+ \item Watch out for special cases.
+\end{itemize}
