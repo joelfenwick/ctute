@@ -1,0 +1,183 @@
+\chapter{Dealing with files}
+
+In standard C, a file is represented by a \texttt{FILE *} (file pointer).
+The contents of this type are unimportant to the user, and you should never dereference a file pointer.
+
+To make things convenient, the standard IO streams already have a \texttt{FILE *} globally defined in the \texttt{stdio.h} header.
+Standard output is available through \texttt{stdout}, standard input is available through \texttt{stdin} and standard error is available through \texttt{stderr}.
+
+\section{Opening a file}
+
+The first thing you will need to do before you read/write to a file is to get a \texttt{FILE *} to it.
+This is done using the \texttt{fopen} function.
+
+\begin{lstlisting}[numbers=none,frame=none]
+FILE *fopen(char *name, char *mode)
+\end{lstlisting}
+
+The function takes two arguments, \texttt{name} and \texttt{mode}, and returns a \texttt{FILE *}.
+The argument \texttt{name} is self explanatory. It is a string containing the name of the file to be opened.
+The \texttt{mode} argument describes what mode you want to open the file in.
+The following \texttt{mode} values are most typical:
+
+\begin{itemize}
+  \item{\textbf{``r''}:} read mode - In this mode the file is opened for reading only, attempts to write to it will fail.
+  \item{\textbf{``w''}:} write mode - In this mode the file is opened for writing only, attempts to read from it will fail (be careful, this mode removes any existing content from the file!).
+  \item{\textbf{``a''}:} append mode - In this mode the file is opened for appending. This is like write mode only it does not remove the existing contents.
+\end{itemize}
+
+Opening a file can fail for many reasons, such as it not existing or not having the correct permissions.
+When using \texttt{fopen}, failure is reported by returning \texttt{NULL}.
+You should always check the return value before continuing.
+The following example shows how to do this.
+
+\begin{lstlisting}
+/* Try and open testfile.txt for reading. */ 
+FILE *testFile = fopen("testfile.txt", "r");
+if (testFile == NULL) {
+    printf("Opening file failed!\n");
+}
+\end{lstlisting}
+
+\section{Reading from a file}
+
+If you have a \texttt{FILE *} which is opened for reading, the next thing you need to do is read from it.
+There are a number of functions which can be used for this, however the most useful is typically \texttt{fgetc}.
+
+\begin{lstlisting}[numbers=none,frame=none]
+int fgetc(FILE *file)
+\end{lstlisting}
+
+The function takes the \texttt{FILE *} you want to read from and returns the next value in the stream.
+One thing that is important to note here is that while the next value in the stream is always of type \texttt{char}, \texttt{fgetc} returns type \texttt{int}. 
+The reason for this is that when there is nothing left to read, the function needs a way to tell you.
+It does this by returning the value \texttt{EOF}, however it needs an extra value (outside the range of a \texttt{char}) to do this.
+By returning an \texttt{int} it as able to do this, however you must be careful to never directly assign the result of \texttt{fgetc} to a \texttt{char}.
+The example below shows how to correctly read a character using \texttt{fgetc}.
+
+\begin{lstlisting}
+int next = fgetc(stdin);
+char result;
+if (next == EOF) {
+    printf("End of file encountered, exiting!\n");
+    exit(0);
+} else {
+  result = (char)next;
+}
+\end{lstlisting}
+
+Often in your program you will want to read a line of text from the file, not just a single character.
+It is helpful in this instance to write a small function that does this which you can reuse later on.
+The following is a small example of how to do this.
+It first checks for either end of file or newline and returns the result (making sure to terminate the string first!), otherwise it appends to new character to the string.
+
+This example uses a fixed size buffer, it is up to the user to work out how to make this more useful.
+The \texttt{realloc} function may be useful for this.
+It may also be useful to differentiate between an empty line ending in a newline or a line only containing \texttt{EOF} (perhaps by returning \texttt{NULL}).
+
+\begin{lstlisting}
+char *
+read_line(FILE *file)
+{
+    char *result = malloc(sizeof(char) * 80);
+    int position = 0;
+    int next = 0;
+
+    while (1) {
+        next = fgetc(file);
+        if (next == EOF || next == '\n') {
+            result[position] = '\0';
+            return result;
+        } else {
+            result[position++] = (char)next;
+        }
+    }
+}
+\end{lstlisting}
+
+\section{Writing to a file}
+
+Being able to write to a file is just as important as being able to read from a file.
+Fortunately this is just as easy as printing to the screen!
+All you have to do is replace \texttt{printf} with \texttt{fprintf}.
+
+\begin{lstlisting}[numbers=none,frame=none]
+int fprintf(FILE *file, char *fmt, ...)
+\end{lstlisting}
+
+The only difference between the two is that \texttt{fprintf} allows you to specify the file that it prints to.
+
+There is one issue that you must be aware of when writing to files, and that is \emph{buffering}. 
+Writing to a file is typically expensive, so the C library tries to be smart and avoid doing it whenever possible.
+It does this by buffering all the things you've written to the file until you call the \texttt{fflush} function or close the file (coming in the next section).
+
+\begin{lstlisting}[numbers=none,frame=none]
+int fflush(FILE *file)
+\end{lstlisting}
+
+While this buffering is good for performance, it can sometimes cause you to think your code is not printing something, when in fact it is just being buffered.
+In general, whenever you want something to appear in the file (this could be stdout), you should \texttt{fflush} it after printing.
+
+\section{When you're finished with a file}
+
+There are only a finite amount of files a process/user can have open at any one time.
+When you're finished with a file, it is good practice to close it and free up its resources.
+This is done using \texttt{fclose}.
+Closing the file also flushes any buffers associated with it if you hadn't done it already.
+
+\begin{lstlisting}[numbers=none,frame=none]
+int fclose(FILE *file)
+\end{lstlisting}
+
+After calling fclose on a \texttt{FILE *} you should no longer attempt to use it again until you reassign it using \texttt{fopen}.
+
+\section{Complete example}
+
+Below is a complete example you can run. 
+It uses concepts from above to read a line from the user and write it to the file ``testfileio.out''.
+
+\begin{lstlisting}
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+char *
+read_line(FILE *file)
+{
+    char *result = malloc(sizeof(char) * 80);
+    int position = 0;
+    int next = 0;
+
+    while (1) {
+        next = fgetc(file);
+        if (next == EOF || next == '\n') {
+            result[position] = '\0';
+            return result;
+        } else {
+            result[position++] = (char)next;
+        }
+    }
+}
+
+int
+main(int argc, char **argv)
+{
+    FILE *outputFile;
+    char *input;
+
+    outputFile = fopen("testfileio.out", "w");
+
+    printf("Type something: ");
+    fflush(stdout); /* Appear now! */
+
+    input = read_line(stdin);
+
+    fprintf(outputFile, "Read \"%s\" from user!\n", input);
+    fflush(outputFile);
+    fclose(outputFile);
+
+    printf("Done!\n");
+
+    return 0;
+}
+\end{lstlisting}
