@@ -1,2 +1,273 @@
 
 \chapter{Arrays and Pointers}
+
+So far we have only talked about single value types, such as \texttt{int} and \texttt{char}.
+Arrays are also an important aspect to a programming language, and C has these as well.
+
+\section{Declaring an array}
+
+Given a type \texttt{T}, you declare an array of \texttt{T} using square brackets as follows:
+
+\begin{lstlisting}[numbers=none,frame=none]
+T array[numElements];
+\end{lstlisting}
+
+Where \texttt{numElements} is the number of elements you want in the array.
+Note than until C99, numElements had to be a compile time constant.
+This means that in general, if you want to declare an array you must already know the size of it.
+This is not always possible, and how to deal with that will be covered later in this section.
+
+Below are some example array declarations.
+These also show how you can make arrays of arrays.
+
+\begin{lstlisting}
+int nums[6]; // Array of 6 ints
+int 2dNums[3][4]; // Array of 3 arrays of 4 ints
+\end{lstlisting}
+
+\section{Indexing an array}
+
+In C, arrays use 0-based indexing, which means that the first element in the array is at index 0.
+Indexing is done using square brackets similar to how the array were declared.
+The example below shows how the arrays declared above could be indexed.
+
+\begin{lstlisting}
+nums[3] = 0; // 4th element of nums = 0
+2dNums[1][2] = 0; // 2nd row, 3rd column of 2dNums
+\end{lstlisting}
+
+\section{Getting the size of an array}
+
+The C language provides no direct way to query the size of an array.
+It is up to you as the programmer to keep track of the array size, whether by using an additional variable or other means.
+
+\section{Pointer Basics}
+
+To understand how we declare an array without knowing its size at compile time, we need to introduce the concept of a pointer.
+Typically students report pointers as being one of the most difficult concepts to understand, especially when coming from a java/python background.
+
+The simplest way to describe a pointer is as a variable which holds the address of some other piece of memory in the program.
+
+This is a very powerful concept.
+Suppose within your function you have some variable \texttt{x}, and you want to call another function which will update the value of \texttt{x}.
+One option is to pass in \texttt{x} as a argument and then use the return value to assign the new value.
+This doesn't work if you need to update more than one parameter however.
+Instead of giving the function the value of \texttt{x} though, we could instead just tell them where \texttt{x} lives in the memory space.
+This is exactly what a pointer does, it defines where something lives, rather than the value it holds. 
+Of course given the address of something you can still obtain the value, this will be covered shorty.
+
+\subsection{Declaring a pointer}
+
+A pointer is declared by adding a * between the type and the variable name in a normal declaration.
+One thing you must be careful of is the associativity of the *.
+The * binds to the variable \emph{name}, not the type!
+This is a common way people get tricked on exams.
+A pointer can also point to another pointer.
+
+\begin{lstlisting}
+int *p; // Pointer to int
+int **p1; // Pointer to a pointer to an int
+int* x, y; // x is pointer to int, y is int!
+\end{lstlisting}
+
+\subsection{Getting the address of something}
+
+There are two ways you can get the address of something.
+The first is to steal it from somebody else.
+If you already have a pointer variable, you can assign it to another variable just like you would any other type.
+
+\begin{lstlisting}
+int *p = doSomething(); // Returns an int *
+int *p1 = p; // p1 points to the same thing p does.
+\end{lstlisting}
+
+The other way is to task the compiler where it put something.
+You can do this with the \texttt{\&} operator.
+\texttt{\&variable} reads as ``Give me the address of \texttt{variable}''.
+
+\begin{lstlisting}
+int x = 10;
+int *p = &x; // We would say p points to x
+\end{lstlisting}
+
+\subsection{What does it actually point to?}
+
+Having the address of something would not really be that helpful if we can't go and take a look what's actually there.
+This is called \emph{dereferencing}, and we use the \texttt{*} operator for this.
+\texttt{*p}, where \texttt{p} is a pointer, says ``get me the value at the address this thing points to''.
+For example:
+
+\begin{lstlisting}
+int x = 10;
+int *p = &x; // We would say p points to x
+int y = *p; // y = 10, because p points to x
+\end{lstlisting}
+
+As well as getting the value of the thing it points to, we can also use a pointer to change that value.
+
+\begin{lstlisting}
+int x = 10;
+int *p = &x; // We would say p points to x
+*p = 5; // x = 5, because p points to x
+\end{lstlisting}
+
+\section{Dynamically sized array}
+
+With an understanding of basic pointers and arrays, we can now begin to understand how to make an array whose size is not known until runtime.
+An array is just a section of memory that can hold the required amount of the desired type, and a pointer gives us a way to refer to any memory, the missing link is how we can get this memory at runtime not compile time.
+
+\subsection{Memory Allocation}
+
+Fortunately the designers of the language thought about this, and included methods in the standard library which allow you to allocate memory.
+
+If you want to allocate memory, you can use the \texttt{malloc} function. 
+
+\begin{lstlisting}[numbers=none,frame=none]
+void *malloc(size_t size)
+\end{lstlisting}
+
+The \texttt{size} argument is the size in \emph{bytes} you want to allocate.
+That bit about \emph{bytes} is very important.
+You \textbf{must} follow the following pattern whenever you allocate memory unless you really know what you're doing.
+
+\begin{lstlisting}[numbers=none,frame=none]
+T *mem = malloc(sizeof(T) * numElements);
+\end{lstlisting}
+
+Here we see that mem will be a pointer to a chunk of memory large enough to hold \texttt{numElements} of type \texttt{T}.
+This is exactly what we needed for an array!
+We will talk more about this in a bit.
+
+Of course memory allocation does come at a cost, and that cost is you now have to \emph{manage} this newly allocated memory.
+It is up to you, the programmer, to keep track of the memory, and when you're done with it you must give it back to the system.
+You can give memory back by calling \texttt{free} on the original pointer given to you by malloc.
+
+\begin{lstlisting}
+int *mem = malloc(sizeof(int) * 5); // Pointer to memory for 5 ints
+doSomething(mem); // Do something with it
+free(mem); // Now we're done give it back
+\end{lstlisting}
+
+Not freeing your memory after you're done may not cause any immediate problems, but every system resource is finite and eventually you will run out.
+When this happens your program will probably crash, which is not desirable.
+
+Using memory after it has been freed is also another common bug, causing the dreaded ``segfault''.
+Be mindful when you're freeing something that you have not got other variables set to the same pointer.
+
+\subsection{Pointer Indexing}
+
+So now we know how we can get a pointer to some memory that looks exactly like our array did, but we need to know how to index it.
+The solution to this is pointer arithmetic.
+This is best explained with an example
+
+\begin{lstlisting}
+int *mem = malloc(sizeof(int) * 5); // Pointer to memory for 5 ints
+int *first = mem + 0; // Pointer to first element 
+int *second = mem + 1; // Pointer to second element
+\end{lstlisting}
+
+The key thing here is we did \texttt{+ 1}, not \texttt{+ sizeof(int)} like you may expect.
+When adding to a pointer, it will automatically increment by the correct number of bytes for the base types size.
+
+So if we want to access the value of the second int in out new array, we would have to do something like:
+
+\begin{lstlisting}[numbers=none,frame=none]
+int second = *(mem + 1); // Get pointer to second element and deref it
+\end{lstlisting}
+
+This is cumbersome, fortunately the language designers thought so too, and so they allowed the array indexing syntax to also work for pointers.
+Note that this gives you the \emph{value} associated with the second element.
+If you want a pointer to the second element you must use arithmetic shown above or use the \texttt{\&} operator, also shown below.
+
+\begin{lstlisting}[numbers=none,frame=none]
+int second = mem[1]; // Equivalent to code above!
+int *secondPointer = \&mem[1]; // Address of second elem
+\end{lstlisting}
+
+We can also do assignment in just the same way.
+
+\begin{lstlisting}
+/* These are both the same */
+*(mem + 1) = 1;
+mem[1] = 1; 
+\end{lstlisting}
+
+\subsection{Multidimensional Dynamic Array}
+
+Often you will need to have more than one dimension in your array, and doing the allocation for that can sometimes be tricky.
+The following example shows how to allocate a two dimensional array using \texttt{malloc}.
+Note how the convention for mallocing properly from above is followed here! 
+
+\begin{lstlisting}
+int rows = 10;
+int cols = 20;
+
+int **arr = malloc(sizeof(int *) * rows);
+for (int i = 0; i < rows; ++i) {
+    arr[i] = malloc(sizeof(int) * cols);
+}
+\end{lstlisting}
+
+Now you should know everything you need to allocate an array dynamically.
+Also note that you can always allocate an array with size 1 if you only need 1 element!
+In that case it is usually more common to use the \texttt{*} operator for dereferencing rather than \texttt{[]}.
+
+\section{Passing arrays to functions}
+
+In C, unlike \texttt{int} and other single value types, arrays are \emph{not} passed into functions by value.
+The only way you can pass an array to a function is by using a pointer.
+Fortunately, even if you declared your array using the \texttt{[]} shown initially, its name can see be treated as a pointer of type \texttt{T *}.
+
+The example below shows how to pass an array to a function (full function syntax will be discussed later).
+The important thing in this example is you always need to pass the size of the array to the function, because as was said earlier, there is no way to know the size of the memory that the pointer points to automatically.
+If you know for sure the size you are passing (maybe it's always 1), then you could omit the size argument.
+
+\begin{lstlisting}
+void
+arrayFunc(int *arr, int size)
+{
+    ...
+}
+
+void
+someFunc(void)
+{
+    int arr[20];
+    otherFunc(arr, 20);
+}
+\end{lstlisting}
+
+\section{Returning an array from a function}
+
+This is where things can get a little tricky.
+If you declare an array using the \texttt{[]} syntax, it gets placed on the runtime stack.
+When you function returns, the runtime stack is removed.
+This means that you \textbf{cannot} return an array which was declared using \texttt{[]} syntax.
+
+If you want to return an array, you \textbf{must} allocate it dynamically using \texttt{malloc}.
+The downside is you then need a way to also return the size of the newly allocated array.
+You can do this using a pointer argument to the function, as shown below.
+
+\begin{lstlisting}
+int *
+arrayAllocator(int *size)
+{
+    int *array = malloc(sizeof(int) * 20);
+    *size = 20; // Tell the caller how many!
+
+    return array;
+}
+
+void
+someFunc(void)
+{
+    int size, *array;
+
+    /* Note the use of & to make a pointer to the
+     * size variable, which arrayAllocator will
+     * update.
+     */
+    array = arrayAllocator(&size);
+    printf("Array of size %d was allocated\n", size);
+}
+\end{lstlisting}

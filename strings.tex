@@ -1,5 +1,5 @@
 
-\chapter{Strings and String IO}
+\chapter{Strings}
 
 
 \todo{Need to have concepts this section assumes:    chapters on arrays and files}
@@ -103,56 +103,6 @@ char* getMessage2(void) {
 \texttt{getMessage2} is dangerous because the memory used for array \texttt{msg} be used for other things once the function returns.
 Since \texttt{getMessage1} allocates it's memory is on the heap and so won't be reused until it is \texttt{free}d.
 
-How can we read in strings?
-You could use (f)scanf like this:
-\begin{lstlisting}
-char* buffer=malloc(sizeof(char)*5);
-fscanf(f, "%s", buffer); // read a string and store it in buffer
-\end{lstlisting}
-To read the user's response of \texttt{hello}.
-But there are some problems here:
-\begin{itemize}
- \item The buffer array is big enough to hold the characters h-e-l-l-o, but not big enough to hold the end of string terminator.
- \item So, increase the limit to 6. It will still be unstable if someone enters \texttt{greetings and saluations}.
- \item Ok, make the fixed size buffer big enough to hold anything that could be entered.
- This is (almost always) the wrong way to approach the problem\footnote{The exception is if you know that valid input can not be bigger than a known size.
- Even then, you need to consider what happens if you are fed, \emph{invalid} input which is bigger.}.
- 
- For now though, let's change the size to 200 and enter \texttt{greetings and saluations}.
- \item The string in \texttt{buffer} will be "greetings".  
- This is because \texttt{\%s} as an input placeholder only reads up to the next whitespace, not a whole line.
-\end{itemize}
-
-So how should we read in strings in view of the fact that string operations do not check that there is enough room for the string?
-\emph{Carefully}.
-You can read a line of text using \texttt{fgets}:
-\begin{lstlisting}
-char buffer[81];
-char* result=fgets(buffer,81, stdio);
-if (!result) {
-   // we hit end of file
-} else {
-   // do something with the string
-}
-\end{lstlisting}
-The \texttt{fgets} function will read (up to) one less than the number you give it to leave room for the \lstinline!'\0'!.
-Note that if the line was longer than 80 characters, it won't all be read.
-
-The alternative is to read input a character at a time (possibly storing it in a string which you expand as needed) and then processing it.
-\begin{lstlisting}
-char* buffer=malloc(sizeof(char)*80);
-int c;
-do {
-    c=fgetc(file);
-    if (c!=EOF) {
-      // process c
-    }
-} while (c!=EOF);
-\end{lstlisting}
-Note that \texttt{fgetc} returns an \texttt{int} not a \texttt{char}.
-This is because it returns either a character \emph{or} the special extra value EOF.
-Forgetting this leads to bugs.
-
 \section*{String summary}
 \begin{itemize}
  \item Strings are stored in \texttt{char} arrays and must be terminated properly.
@@ -161,5 +111,4 @@ Forgetting this leads to bugs.
  \item \texttt{strlen(s)} --- length of \texttt{s}.
  \item \texttt{strcpy(d,s)} --- make \texttt{d} a copy of \texttt{s}
  \item \texttt{strcat(d,s)} --- copy \texttt{s} onto the end of \texttt{d}.
- \item \texttt{fgets} and \texttt{fgetc} are your freinds.
 \end{itemize}
