@@ -26,7 +26,7 @@ The types (and number of) placeholders must match the type of pointers given the
 For example:
 \begin{lstlisting}
 char c;
-scanf("%d",&c); 
+scanf("%d", &c); 
 \end{lstlisting}
 --- storing an \texttt{int} into a \texttt{char} is a bad idea.
 Since \texttt{int}s are bigger than \texttt{char}s additional memory ``outside'' \texttt{c} and possibly overwrite 
@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
         printf("Enter a number: "); 
         scanf("%d", &number);
         printf("Number was %d\n", number);
-    } while (number!=0);
+    } while (number != 0);
     return 0;
 }
 \end{lstlisting}
@@ -65,10 +65,10 @@ When you use functions, you should (if possible) check to see if it worked.
 So in this case, if the input succeeded, we would expect a return value of $1$.
 Replace the \texttt{scanf} call with:
 \begin{lstlisting}
-    if (scanf("%d", &number)==1) {
+    if (scanf("%d", &number) == 1) {
        printf("Number was %d\n", number); 
     } else {
-       number=0;	// trigger the end of the loop
+       number = 0;	// trigger the end of the loop
     }
 \end{lstlisting}
 
