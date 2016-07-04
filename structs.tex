@@ -1,5 +1,136 @@
 
-\chapter{structs}
+\chapter{Structs}
 
 
 % Should go after pointers so we can explain about passing them by value
+
+Often when you are programming you will have a number of variables all related to the same task.
+In a language like python or java, you may use a class to help signify this grouping, which can also have methods which operate on instances of the class (objects).
+In C there is no concept of a class, however it does provide a way to group variables into a common place.
+This is called a struct.
+
+\section{Defining a Struct}
+
+The syntax for defining a struct is shown below.
+This defines a struct whose name is myStruct.
+The struct contains 3 members, an \texttt{int} called \texttt{a}, a \texttt{char} called \texttt{b} and an \texttt{int *} called \texttt{c}.
+
+\begin{lstlisting}
+struct myStruct {
+    int a;
+    char b;
+    int *c;
+}
+\end{lstlisting}
+
+\section{Declaring and accessing members}
+
+Structs can be used in place of any other type.
+This means you can have a struct variable, and also a struct pointer, shown below.
+
+\begin{lstlisting}
+/* var1 is of type struct myStruct */
+struct myStruct var1; 
+/* var2 is of type struct myStruct pointer */
+struct myStruct *var2; 
+\end{lstlisting}
+
+If you have a variable of type struct something, then you can access the members using the \texttt{.} operator.
+For example using \texttt{var1} from above we could have
+
+\begin{lstlisting}
+int x = var1.a
+char y = var1.b
+int *z = var1.c
+\end{lstlisting}
+
+If you have a pointer to a struct, then you can access the members using the \texttt{->} operator.
+For example using \texttt{var2} from above
+
+\begin{lstlisting}
+int x = var2->a
+char y = var2->b
+int *z = var2->c
+\end{lstlisting}
+
+You can also assign to struct members using the same syntax.
+
+\section{Passing structs to functions}
+
+Often you might be in a situation where you have a struct, and you want to call a function which will use and update some part of that struct.
+A mistake people often make here is that they assume structs are some sort of special type like in java/python where they are passed by reference by default.
+This is not the case.
+If you pass a struct to a function, that function will be working on a \emph{copy} of the struct.
+Whatever you do to it in the function will not be reflected in the calling function's version of the struct.
+You can return structs from a function to allow the values to be updated, but that involves a lot of copying you probably don't need.
+
+As a general rule, if you're passing a struct to a function it's likely you want to be passing a pointer to that stuct.
+As was previously mentioned in the pointers section, a pointer lets the function know where \emph{your} copy of the stuct it and allows it to update it.
+The follow example demonstrates how this works.
+
+\begin{lstlisting}
+void
+structFunc(struct myStruct *s)
+{
+    /* Note the use of -> because we have a pointer */
+    s->a = 10;
+}
+
+void
+otherFunc(void)
+{
+    struct myStruct s;
+
+    /* Here we use . because it's not a pointer! */
+    s.a = 5;
+    printf("s.a before: %d\n", s.a); // prints 5
+    structFunc(&s); // make a pointer to s
+    printf("s.a after: %d\n", s.a); // prints 10
+}
+\end{lstlisting}
+
+\section{Self referencing structs}
+
+An interesting thing to consider is whether a struct can contain itself.
+If you think about this, a struct containing itself creates an infinite recursion when computing the size, so it is not allowed.
+However a struct can contain a \emph{pointer} to itself.
+Why?
+Because the size of a pointer is always known by the compiler.
+The size of the thing it points to has no impact on the memory needed to store an address.
+
+Consider the example below.
+We have a struct type called \texttt{node} which has 2 ints and then a pointer to another struct of the same type.
+You will see how this can be used to implement useful data structures in a later section.
+
+\begin{lstlisting}
+struct node {
+    int a;
+    int b;
+    struct node *next;
+}
+\end{lstlisting}
+
+\section{The size of a struct}
+
+In the above section we mentioned the compiler computing the size of a struct.
+If you want to use the malloc rule that was introduced early, you need to be able to find the size of the struct in bytes.
+Fortunately this works just like every other type!
+
+\begin{lstlisting}[numbers=none,frame=none]
+struct myStruct *s = malloc(sizeof(stuct myStruct) * 1);
+\end{lstlisting}
+
+One thing you need to be careful of when working with structs is making assumptions about how big it will end up being.
+Consider the example below.
+It may be intuitive to think the total size of this struct will be 5 bytes, but that is unlikely to be true unless you ask the compiler really nicely.
+Modern CPU's in general require data to be aligned on certain memory address boundaries in order to load them most efficiently, and the compiler will respect this.
+You should always ask the compiler using \texttt{sizeof} because it is the one who ultimately decides the size that is best for the CPU your code is running on.
+You may find that the size of the struct below is actually 8 bytes.
+
+\begin{lstlisting}
+struct s {
+    char a; // 1 byte
+    int b; // 4 bytes
+}
+\end{lstlisting}
+
