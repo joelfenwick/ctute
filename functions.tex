@@ -43,15 +43,16 @@ Enter and compile the following:
 void swap(int p, int q) {
     int temp;
     printf("p=%d q=%d\n", p, q);
-    temp=p;
-    p=q;
-    q=temp;
+    temp = p;
+    p = q;
+    q = temp;
     printf("p=%d q=%d\n", p, q);
 }
 
 int main(int argc, char** argv) {
-    int a=3, b=4; // variables can be initialised as they are declared
-    swap(a,b);
+    /* variables can be initialised as they are declared */
+    int a = 3, b = 4;
+    swap(a, b);
     printf("a=%d b=%d\n", a, b);
     return 0;
 }
@@ -118,7 +119,7 @@ Modify the swap declaration to be:
 and try to compile.
 
 The problem is that the function now expects pointers and we are passing in \texttt{int}s.
-So change the swap \emph{call} to \lstinline!swap(&a,&b);!.
+So change the swap \emph{call} to \lstinline!swap(&a, &b);!.
 This means that the function expects pointers and we are giving it pointers.
 The code inside the function is not right yet though.
 Line~3 tries to print out the parameters but we don't care what the addresses of the variables are, we want to know what is
@@ -137,8 +138,8 @@ Suppose \texttt{a} and \texttt{b} are stored in locations \lstinline{xFFFF0000} 
 \begin{itemize}
  \item \lstinline{swap(&a, &b)} will become \lstinline{swap(xFFFF0000, xFFFF0008);}.
  \item Those pointer \emph{values} will be \emph{copied} into the function variables \texttt{p} and \texttt{q}.
- \item \lstinline!temp=*p! would become \lstinline!temp=*(xFFFF0000)! ie \texttt{temp=} the value stored at location 
- \lstinline!xFFFF0000!.  That is, \lstinline!temp=3;!
+ \item \lstinline!temp = *p! would become \lstinline!temp = *(xFFFF0000)! ie \texttt{temp =} the value stored at location 
+ \lstinline!xFFFF0000!.  That is, \lstinline!temp = 3;!
 \end{itemize}
 
 So, the pointers were passed by value (copied) but a copy of a pointer is just as good at accessing the original thing.
