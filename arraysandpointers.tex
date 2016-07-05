@@ -143,7 +143,8 @@ It is up to you, the programmer, to keep track of the memory, and when you're do
 You can give memory back by calling \texttt{free} on the original pointer given to you by malloc.
 
 \begin{lstlisting}
-int *mem = malloc(sizeof(int) * 5); // Space for 5 ints
+/* Pointer to memory for 5 ints */
+int *mem = malloc(sizeof(int) * 5);
 doSomething(mem); // Do something with it
 free(mem); // Now we're done give it back
 \end{lstlisting}
@@ -161,7 +162,8 @@ The solution to this is pointer arithmetic.
 This is best explained with an example
 
 \begin{lstlisting}
-int *mem = malloc(sizeof(int) * 5); // Space for 5 ints
+/* Pointer to memory for 5 ints */
+int *mem = malloc(sizeof(int) * 5); 
 int *first = mem + 0; // Pointer to first element 
 int *second = mem + 1; // Pointer to second element
 \end{lstlisting}
