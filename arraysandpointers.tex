@@ -66,7 +66,7 @@ A pointer can also point to another pointer.
 
 \begin{lstlisting}
 int *p; // Pointer to int
-int **p1; // Pointer to a pointer to an int
+int** p1; // Pointer to a pointer to an int
 int* x, y; // x is pointer to int, y is int!
 \end{lstlisting}
 
@@ -77,8 +77,8 @@ The first is to steal it from somebody else.
 If you already have a pointer variable, you can assign it to another variable just like you would any other type.
 
 \begin{lstlisting}
-int *p = doSomething(); // Returns an int *
-int *p1 = p; // p1 points to the same thing p does.
+int* p = doSomething(); // Returns an int *
+int* p1 = p; // p1 points to the same thing p does.
 \end{lstlisting}
 
 The other way is to task the compiler where it put something.
@@ -87,7 +87,7 @@ You can do this with the \texttt{\&} operator.
 
 \begin{lstlisting}
 int x = 10;
-int *p = &x; // We would say p points to x
+int* p = &x; // We would say p points to x
 \end{lstlisting}
 
 \subsection{What does it actually point to?}
@@ -99,7 +99,7 @@ For example:
 
 \begin{lstlisting}
 int x = 10;
-int *p = &x; // We would say p points to x
+int* p = &x; // We would say p points to x
 int y = *p; // y = 10, because p points to x
 \end{lstlisting}
 
@@ -107,7 +107,7 @@ As well as getting the value of the thing it points to, we can also use a pointe
 
 \begin{lstlisting}
 int x = 10;
-int *p = &x; // We would say p points to x
+int* p = &x; // We would say p points to x
 *p = 5; // x = 5, because p points to x
 \end{lstlisting}
 
@@ -123,7 +123,7 @@ Fortunately the designers of the language thought about this, and included metho
 If you want to allocate memory, you can use the \texttt{malloc} function. 
 
 \begin{lstlisting}[numbers=none,frame=none]
-void *malloc(size_t size)
+void* malloc(size_t size)
 \end{lstlisting}
 
 The \texttt{size} argument is the size in \emph{bytes} you want to allocate.
@@ -131,7 +131,7 @@ That bit about \emph{bytes} is very important.
 You \textbf{must} follow the following pattern whenever you allocate memory unless you really know what you're doing.
 
 \begin{lstlisting}[numbers=none,frame=none]
-T *mem = malloc(sizeof(T) * numElements);
+T* mem = malloc(sizeof(T) * numElements);
 \end{lstlisting}
 
 Here we see that mem will be a pointer to a chunk of memory large enough to hold \texttt{numElements} of type \texttt{T}.
@@ -144,7 +144,7 @@ You can give memory back by calling \texttt{free} on the original pointer given 
 
 \begin{lstlisting}
 /* Pointer to memory for 5 ints */
-int *mem = malloc(sizeof(int) * 5);
+int* mem = malloc(sizeof(int) * 5);
 doSomething(mem); // Do something with it
 free(mem); // Now we're done give it back
 \end{lstlisting}
@@ -163,9 +163,9 @@ This is best explained with an example
 
 \begin{lstlisting}
 /* Pointer to memory for 5 ints */
-int *mem = malloc(sizeof(int) * 5); 
-int *first = mem + 0; // Pointer to first element 
-int *second = mem + 1; // Pointer to second element
+int* mem = malloc(sizeof(int) * 5); 
+int* first = mem + 0; // Pointer to first element 
+int* second = mem + 1; // Pointer to second element
 \end{lstlisting}
 
 The key thing here is we did \texttt{+ 1}, not \texttt{+ sizeof(int)} like you may expect.
@@ -183,7 +183,7 @@ If you want a pointer to the second element you must use arithmetic shown above 
 
 \begin{lstlisting}[numbers=none,frame=none]
 int second = mem[1]; // Equivalent to code above!
-int *secondPointer = \&mem[1]; // Address of second elem
+int* secondPointer = \&mem[1]; // Address of second elem
 \end{lstlisting}
 
 We can also do assignment in just the same way.
@@ -204,7 +204,7 @@ Note how the convention for mallocing properly from above is followed here!
 int rows = 10;
 int cols = 20;
 
-int **arr = malloc(sizeof(int *) * rows);
+int** arr = malloc(sizeof(int *) * rows);
 for (int i = 0; i < rows; ++i) {
     arr[i] = malloc(sizeof(int) * cols);
 }
@@ -225,14 +225,13 @@ The important thing in this example is you always need to pass the size of the a
 If you know for sure the size you are passing (maybe it's always 1), then you could omit the size argument.
 
 \begin{lstlisting}
-void
-arrayFunc(int *arr, int size)
+void arrayFunc(int *arr, int size)
 {
     ...
 }
 
-void
-someFunc(void)
+
+void someFunc(void)
 {
     int arr[20];
     otherFunc(arr, 20);
@@ -251,17 +250,15 @@ The downside is you then need a way to also return the size of the newly allocat
 You can do this using a pointer argument to the function, as shown below.
 
 \begin{lstlisting}
-int *
-arrayAllocator(int *size)
+int* arrayAllocator(int *size)
 {
-    int *array = malloc(sizeof(int) * 20);
+    int* array = malloc(sizeof(int) * 20);
     *size = 20; // Tell the caller how many!
 
     return array;
 }
 
-void
-someFunc(void)
+void someFunc(void)
 {
     int size, *array;
 
