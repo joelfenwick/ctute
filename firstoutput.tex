@@ -24,6 +24,7 @@ If there aren't enough arguments, or the argument is the wrong type, unexpected 
 To print an integer instead of a string, use the \%d placeholder.
 For example: \lstinline!printf("%d + %d = %d\n", 5, 7, 12);!
 You can use any mixture of placeholders and normal characters in the \emph{format string} that you like.
+To print a \% symbol, use \%\%.
 
 
 Compile the following:
@@ -103,6 +104,8 @@ do {
     Update
 } while(Test);
 \end{lstlisting}
+
+The \emph{do-while} loop differs from the \emph{while} loop by always running the Body and Update once before the Test is performed and the loop loops.
 
 So we could do this:
 \begin{lstlisting}

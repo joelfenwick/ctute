@@ -16,7 +16,7 @@ In fact, literal values are also expressions (they evaluate to the value as writ
 The operators $+$ and $-$ work as you would expect.
 Division is written with $/$ and multiplication as $*$.
 
-The \% operator returns the remainder of its arguments.
+The \% operator (known as ``modulo'') returns the remainder of its arguments;
 \texttt{a\%b} returns the remainder when \texttt{a} is divided by \texttt{b}.
 For example: $7\%3$ is $1$   and $23\%5$ is $3$.
 
@@ -48,13 +48,13 @@ int main(int argc, char** argv) {
 
 \noindent Exercise: Modify the program above to test relative precedence of \texttt{+} and \texttt{\%}.
 
-\subsection{Types}
+\subsection{Simple Types}
 All of C's simple types are numeric in some way.
 This includes types which have other purposes (\texttt{char} and \texttt{bool}).
 
 Numeric types can be classified in a number of ways:
 \begin{itemize}
- \item Integer vs Floating point --- \texttt{bool, char, int} are integer types while \texttt{float} and \texttt{double} are floating point types.
+ \item Integer vs Floating point --- \texttt{bool\footnote{\texttt{stdbool.h} must be included to use \texttt{bool} (and \texttt{true} and \texttt{false}).}, char, int} are integer types while \texttt{float} and \texttt{double} are floating point types.
 Arithmetic operators which act on integers \emph{will evaluate to an integer result} so for example, \texttt{5/2} is \texttt{2}, not \texttt{2.5}.
 Do not make this mistake:
 \texttt{float f=2/3;}
@@ -74,7 +74,7 @@ You could also achieve this with a \emph{cast}: \texttt{2/(float)3} or multiplic
  For example:  \texttt{short int}, \texttt{long int} are smaller and larger than normal \texttt{int}s respectively.
  These can be combined with \texttt{signed} and \texttt{unsigned}.
 \end{itemize}
-There are other type modifiers but we'll keep this simple and standard\footnote{For example: \texttt{long long int}  and \texttt{quad double}}.
+There are other type modifiers but we'll keep this simple and standard\footnote{For example: \texttt{long long int}  and \texttt{quad double} are non-standard types.}.
 
 
 To output other types, with \texttt{printf}, different placeholders are required:
@@ -94,6 +94,7 @@ These operators act on the individual bits in the value.
 \begin{itemize}
  \item \lstinline|a&b| --- bitwise \emph{and} of the two values.
  \item \lstinline:a|b: --- bitwise \emph{or} of the two values.
+ \item \lstinline|a^b| --- bitwise \emph{exclusive or} of the two values.
  \item \lstinline|a<<b| --- left shift \texttt{a} by \texttt{b} bits.
  \item \lstinline|a>>b| --- right shift \texttt{a} by \texttt{b} bits.
  \item \lstinline|~a| --- one's complement of \texttt{a}.
@@ -103,6 +104,7 @@ These operators act on the individual bits in the value.
 
 These return a boolean value \texttt{true} or \texttt{false}.
 Remember that in C, \texttt{bool}s are also integer values.
+A 0 indicates false, and any non-zero value represents true.
 
 \lstinline|a < b, a <= b, a > b, a >= b, a != b, a == b|.
 Be careful comparing floating point values, since numerical errors can 
@@ -117,6 +119,7 @@ These look like their bitwise counterparts so it is important not to mix them up
  \item \lstinline|!a|   --- logical \emph{not}. eg: \lstinline@!(a || b) == (!a && !b)@  (deMorgan's law)
 \end{itemize}
 
+\lstinline!&&! and \lstinline!||! are ``short-circuiting'' operators: the second argument will not be evaluated unless required (ie: in \lstinline!false && EXP! and \lstinline!true || EXP!, \texttt{EXP} will not be evaluated).
 
 \section{Other operators}
 
