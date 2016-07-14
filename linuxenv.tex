@@ -81,7 +81,7 @@ gcc -c file1.c
 gcc -c file2.c
 gcc -c file3.c
 \end{verbatim}
-Would compile each of the files (and check them for correctness).
+Would compile each of the files (and check them for correctness) to a corresponding \texttt{.o} file.
 Following that:
 \begin{verbatim}
 gcc file1.o file2.o file3.o 
@@ -93,6 +93,7 @@ Adding \texttt{-Wall} and/or \texttt{-pedantic} will cause \texttt{gcc} to repor
 
 \section{Other notes}
 It may seem obvious, but do not ignore error or warning messages.
+While warnings for other languages often mean ``your code could be written more nicely'', warnings in C often mean ``your code will not do what you think it will''.
 
 You can save error messages by adding \verb|2>errfilename| to the end of a command.
 For example:
