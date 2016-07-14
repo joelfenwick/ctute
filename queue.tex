@@ -123,8 +123,9 @@ void init_queue(queue* q) {
 void free_queue(queue* q) {
     struct queue_node* t=q->head;
     while (t!=0) {
-        struct queue_node* temp=t;	// we need this so we can free it
-        t=t->next;			// after t has moved on
+	    // we need this so we can free it
+        struct queue_node* temp=t; // after t has moved on
+        t=t->next;		
         free(temp);
     }
 }
@@ -133,11 +134,13 @@ void free_queue(queue* q) {
 We will add new elements to the end (tail) of the queue and remove items from the front (head) of the queue.
 \begin{lstlisting}
 void add_queue(queue* q, int d) {
-    if (q->head==0) {		// don't forget the special case of an empty queue
+      // don't forget the special case of an empty queue
+    if (q->head==0) {	
         q->tail=q->head=malloc(sizeof(struct queue_node));
         q->head->next=0;
     } else {
-	struct queue_node* n=malloc(sizeof(struct queue_node));
+	struct queue_node* n=malloc(
+	    sizeof(struct queue_node));
 	n->next=0;
 	q->tail->next=n
 	q->tail=n;

@@ -49,7 +49,8 @@ int main(int argc, char** argv) {
     msg[0] = 'h';
     msg[1] = 'w';
     printf("strlen(%s)==%d\n", msg, strlen(msg));
-    printf("msg==\"hw\" -> %d, strcmp(msg,\"hw\")==%d\n", (msg == "hw"), strcmp(msg, "hw"));
+    printf("msg==\"hw\" -> %d, strcmp(msg,\"hw\")
+        ==%d\n", (msg == "hw"), strcmp(msg, "hw"));
     return 0;
 }
 \end{lstlisting}
@@ -112,3 +113,40 @@ Since \texttt{getMessage1} allocates it's memory is on the heap and so won't be 
  \item \texttt{strcpy(d, s)} --- make \texttt{d} a copy of \texttt{s}
  \item \texttt{strcat(d, s)} --- copy \texttt{s} onto the end of \texttt{d}.
 \end{itemize}
+
+\section*{Exercises}
+\begin{enumerate}
+\item
+Write a function called \texttt{mystrlen} which does the same job as the standard \texttt{strlen} function.
+You are not permitted to call any standard C string functions.
+
+Test it with the following:
+\begin{lstlisting}[numbers=none]
+#include <stdio.h>
+
+// your code here
+
+int main(int argc, char** argv) {
+    if ((mystrlen("hello") == 5) && (mystrlen("") == 0)) {
+        printf("Ok\n");
+    } else {
+        printf("No\n");
+    }
+    return 0;
+}
+\end{lstlisting}
+
+\item Write your own version of \texttt{strcpy} (mystrcpy) which does the same job.
+You are not permitted to call any standard C string functions.
+Write a test program to demonstrate your function is correct.
+
+\item Write a function \lstinline!char* stringadd(const char* s1, const char* s2)! which takes two strings and 
+returns a new string which contains \texttt{s1} followed by \texttt{s2}.
+You are not permitted to call any standard C string functions.
+Write a test program to confirm that your function is correct.
+
+\item Write a function which reads a line of any length from a file, and returns it as a string.
+You are not permitted to use \texttt{fgets}.
+Write a test program to confirm that your function is correct.
+ 
+\end{enumerate}

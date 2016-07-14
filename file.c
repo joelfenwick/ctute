@@ -6,7 +6,8 @@
    but it demonstrates fseek.
 */
 int* read_nums_presize(FILE* in, int* size) {
-    /* check the file first to see how many numbers are in it*/
+        /* check the file first to see how 
+	 * many numbers are in it*/
     *size=0;
     int num;
     while (fscanf(in, "%d", &num)==1) {
