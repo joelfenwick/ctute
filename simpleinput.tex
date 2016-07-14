@@ -11,29 +11,29 @@ Values can be read from the user with \texttt{scanf}.
 This function is quite powerful and we won't deal with all its capabilities here.
 
 A  call to \texttt{scanf} function looks a bit like a \texttt{printf} call:
-\begin{lstlisting}
+\begin{codeblock}
 void get_and_print(void) {
     int x;
     scanf("%d", &x);
     printf("%d\n", x);
 }
-\end{lstlisting}
+\end{codeblock}
 Like \texttt{printf}, \texttt{scanf} takes a string with placeholders and some variables\footnote{Actually any expression which evaluates to a pointer will do but let's keep it simple.}.
 The difference is that the variables are pointers to the variables and we are storing into the variables
 rather than reading from them.
 
 The types (and number of) placeholders must match the type of pointers given the argument list.
 For example:
-\begin{lstlisting}
+\begin{codeblock}
 char c;
 scanf("%d", &c); 
-\end{lstlisting}
+\end{codeblock}
 --- storing an \texttt{int} into a \texttt{char} is a bad idea.
 Since \texttt{int}s are bigger than \texttt{char}s additional memory ``outside'' \texttt{c} and possibly overwrite 
 other variables.
 
 Compile and run the following program:
-\begin{lstlisting}
+\begin{codeblock}
 #include <stdio.h>
 
 int main(int argc, char** argv) {
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
     } while (number != 0);
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}
 Enter a few numbers, you don't need to press enter after each number, but you will need an enter before the program 
 takes notice of your input.
 Enter a zero to finish.
@@ -64,13 +64,13 @@ When you use functions, you should (if possible) check to see if it worked.
 \texttt{scanf} will return the number of variables it managed to read correctly.
 So in this case, if the input succeeded, we would expect a return value of $1$.
 Replace the \texttt{scanf} call with:
-\begin{lstlisting}
+\begin{codeblock}
     if (scanf("%d", &number) == 1) {
        printf("Number was %d\n", number); 
     } else {
        number = 0;	// trigger the end of the loop
     }
-\end{lstlisting}
+\end{codeblock}
 
 Recompile the program and try the same sequence of input.
 

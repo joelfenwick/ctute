@@ -13,13 +13,13 @@ For example:
 
 To access external files, use \texttt{fopen} to get \texttt{FILE*} and \texttt{fclose} when you are finished.
 For example:
-\begin{lstlisting}[numbers=none]
+\begin{codeinline}
 FILE* f=fopen("message.txt", "r");
 /* some code */
 fprintf(f, "%s", "Greetings\n");
 /* more code */
 fclose(f);
-\end{lstlisting}
+\end{codeinline}
 The second parameter on \texttt{fopen}, indicates whether the file should be opened for reading or writing\footnote{see documentation for other options}.
 The code above, assumes that the open succeeded, but what if the file isn't there?
 \texttt{fopen} will return a NULL pointer if the open fails, so we could test for that with something like:\\
@@ -31,7 +31,7 @@ Instead the output is saved up (buffered) until later when it is sent in one big
 This is called \emph{flushing}.
 In many cases, this is a good thing because it is more efficient.
 But if you want to ensure output has actually been sent, you can force the stream to be flushed by calling \texttt{fflush}.
-\begin{lstlisting}[numbers=none]
+\begin{codeinline}
 FILE* f=fopen("message.txt", "r");
 if (!f) {
     /* do something if file doesn't open */
@@ -41,7 +41,7 @@ fprintf(f, "%s", "Greetings\n");
 fflush(f);
 /* more code */
 fclose(f);
-\end{lstlisting}
+\end{codeinline}
 
 \emph{Do not \emph{fflush} after every output statement} unless you have a good reason, it slows down your program.
 Streams are \texttt{fflush}ed automatically when files are \texttt{fclose}d or when a program exits normally.
