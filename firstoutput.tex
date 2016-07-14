@@ -16,7 +16,7 @@ Although you \emph{can} just print strings directly with printf, it isn't necess
 To understand why, we need to look at how \texttt{printf} deals with variables.
 Replace Line~$4$ with \lstinline!printf("%s\n", "Going to print some things %s%s%s ");!
 
-The first parameter of \texttt{printf}, describes what is to be printed, any sequence starting with \% is called a placeholder and will be replaced with something else when the output is done.
+The first parameter of \texttt{printf} describes what is to be printed: any sequence starting with \% is called a placeholder and will be replaced with something else when the output is printed.
 Characters after the \% indicate what type of thing is to be printed (and possibly how it is to be formatted).
 So \%s in the first argument tells \texttt{printf} that it should look at the next argument along, interpret it as a string and print it.
 If there aren't enough arguments, or the argument is the wrong type, unexpected things may occur.
@@ -38,9 +38,9 @@ int main(int argc, char** argv) {
 \end{lstlisting}
 Lines~4 and 5 show that you can break lines to improve layout and readability.
 Try running the program with a variety of command line arguments.
-You will see that \texttt{argv[0]}, contains the name of the program (\texttt{argv} stands for ``argument values") and that \texttt{argc} gives the ``argument count'' --- how many there were).
-Since the argv always has at least one thing in it, argc$\geq 1$ and accessing argv[0] should always be safe.
-But change the program to print argv[200] and see what happens.
+You will see that \texttt{argv[0]} contains the name of the program (\texttt{argv} stands for ``argument values") and that \texttt{argc} gives the ``argument count'' --- how many there were.
+Since \texttt{argv} always has at least one thing in it, \texttt{argc} $\geq 1$ and accessing \texttt{argv[0]} should always be safe.
+But change the program to print \texttt{argv[200]} and see what happens.
 
 
 By using a conditional statement, we can safely print more if it is available.
@@ -79,14 +79,14 @@ So to display command line arguments:
 
 C has three types of loop structure:
 
-The \emph{for} loop
+The \emph{for} loop:
 \begin{lstlisting}
 for (Setup ; Test ; Update) {
     Body
 }
 \end{lstlisting}
 
-The \emph{while} loop
+The \emph{while} loop:
 \begin{lstlisting}
 Setup
 while (Test) {
@@ -95,7 +95,7 @@ while (Test) {
 }
 \end{lstlisting}
 
-and the \emph{do-while} loop
+and the \emph{do-while} loop:
 \begin{lstlisting}
 Setup
 do {

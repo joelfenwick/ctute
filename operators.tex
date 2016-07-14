@@ -8,7 +8,7 @@ there are some things which need to be known at \emph{compile time} rather than 
 The most obvious cases of this are \emph{case labels} and array sizes in ANSI-C.}.
 An expression is a fragment of code which can be ``evaluated'' --- that is, they can be processed to get a value.
 For example:
-\texttt{3+4} is an expression which, when evaluated gives the value $7$.
+\texttt{3+4} is an expression which gives the value $7$ when evaluated.
 In fact, literal values are also expressions (they evaluate to the value as written).
 
 \section{Arithmetic operators}
@@ -63,7 +63,7 @@ This is because storing a value in a variable does not influence the way the exp
 
 If an expression contains a mixture of types, its arguments will be converted to the most general type.
 For example:
-\texttt{2/3.0} will give a floating point result because one of its arguments is floating point\footnote{Somewhat confusingly, the default floating point type in C is \texttt{double} not \texttt{float}.}
+\texttt{2/3.0} will give a floating point result because one of its arguments is floating point\footnote{Somewhat confusingly, the default floating point type in C is \texttt{double} not \texttt{float}.}.
 You could also achieve this with a \emph{cast}: \texttt{2/(float)3} or multiplication \texttt{(1.0*2)/3}.
 
  \item Signed vs Unsigned --- integer types can be restricted to store only positive values\footnote{and therefore store higher maximum values using the same number of bits because the sign bit can be used for value storage.}
@@ -71,15 +71,15 @@ You could also achieve this with a \emph{cast}: \texttt{2/(float)3} or multiplic
  
  \item size --- types can be modified to indicate how much memory they take\footnote{In C, these modifications are not absolutely defined in the standard.}. 
  Types which take more memory can store a larger range of values.
- For example:  \texttt{short int}, \texttt{long int} are smaller and larger than normal \texttt{int}s respectively.
+ For example:  \texttt{short int} and \texttt{long int} are smaller and larger than normal \texttt{int}s respectively.
  These can be combined with \texttt{signed} and \texttt{unsigned}.
 \end{itemize}
 There are other type modifiers but we'll keep this simple and standard\footnote{For example: \texttt{long long int}  and \texttt{quad double}}.
 
 
-To output other types, with \texttt{printf}, different placeholders are required:
+To output other types with \texttt{printf}, different placeholders are required:
 \begin{itemize}
- \item [\%e \%f \%g] --- all of these will output \texttt{float} \emph{or} \texttt{double} but they output in different ways.
+ \item [\%e \%f \%g] --- all of these will output a \texttt{float} \emph{or} \texttt{double} but they format it in different ways.
  \item [\%c] --- prints a char (as a character rather than as a number).
  \item [\%hd] --- prints a \texttt{short int}.
  \item [\%ld] --- prints a \texttt{long int}.

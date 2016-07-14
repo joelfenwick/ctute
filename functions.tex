@@ -20,8 +20,8 @@ Unlike many other languages, to tell the compiler that a function has no paramet
 need to write \lstinline!(void)! for the parameter list instead of just \lstinline!()!.
 A return type of \lstinline!void! means that the function does not return anything.
 
-If a function has parameters, then the type of each parameter needs to be given explictly.
-As opposed to declaring normal variables, where you can do this: \lstinline!int i,j,k!.
+If a function has parameters, then the type of each parameter needs to be given explictly (as
+opposed to declaring normal variables, where you can do this: \lstinline!int i,j,k!).
 
 For example, the following function returns the maximum of two integers.
 \begin{lstlisting}
@@ -79,9 +79,9 @@ So, the function swaps values in variables but that doesn't change anything outs
 
 To demonstrate this further, try changing the swap call to \lstinline!swap(2, (5*7)-6)!.
 
-To allow functions to modify their arguments, the you need use \emph{pass by reference} which C doesn't really have.
+To allow functions to modify their arguments, then you need to use \emph{pass by reference}, which C doesn't really have.
 Instead we make use of \emph{pointers}.
-A pointer is not a way to refer to memory by its address rather than by variable name.
+A pointer is a way to refer to memory by its address rather than by variable name.
 You can get the address of any variable using the \lstinline!&! operator.
 So \lstinline!&length! gives a pointer to the \texttt{length} variable.
 
@@ -147,7 +147,7 @@ So, the pointers were passed by value (copied) but a copy of a pointer is just a
 Main points to remember:
 \begin{enumerate}
  \item If you want to change something outside a function from inside the function, you may need to use a pointer.
- \item Pointers have two ends. eg \lstinline!int* fred!.   \texttt{fred} is the pointer and \texttt{*fred} is the thing 
+ \item Pointers have two ends. eg \lstinline!int* fred!:   \texttt{fred} is the pointer and \texttt{*fred} is the thing 
  being pointed at.
  \item Pointers to different types of things are different. \texttt{int* c} and \texttt{char* i} are not the same type of thing.
  \item There is a special pointer written as \texttt{NULL} or \texttt{0} which points to nothing.

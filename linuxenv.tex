@@ -6,18 +6,17 @@ This could either be a local terminal window on operating systems which support 
 We will assume you are using the \texttt{bash} shell and the \texttt{gcc} C compiler.
 
 \section{Creating source files}
-C source files can be created and edited using any plain text editor\footnote{Some tools (such as MacOS's TextEdit) can save formatting or not. Make sure you are using text only.}.
-For example \texttt{nano} or \texttt{vim}.
+C source files can be created and edited using any plain text editor\footnote{Some tools (such as MacOS's TextEdit) can save formatting or not. Make sure you are using text only.} (eg: \texttt{nano} or \texttt{vim}).
 Be aware that different operating systems have different ideas about what the end of a line looks like.
 For example, compiling a file on Linux which has Windows line endings in it will lead to compile errors.
 With this in mind, try to edit on the same platform you will be compiling on (or failing that, use a tool which respects the target
-platform's line endings\footnote{For example, Notepad++ can be set to act in this way.}
+platform's line endings\footnote{For example, Notepad++ can be set to act in this way.}.
 
-Some systems have case-sensitive filenames and some have case insensitive (eg: \texttt{bob.c} is considered to be the same file as \texttt{Bob.C}.
+Some systems have case-sensitive filenames and some are case-insensitive (eg: \texttt{bob.c} is considered to be the same file as \texttt{Bob.C}).
 Regardless of your home system, you should try to use consistent cases.
 For \texttt{gcc}, C source files must end in \texttt{.c} (lower case) or later on \texttt{.h}.
 
-Put the following in a file called \texttt{test.c}
+Put the following in a file called \texttt{test.c}:
 \begin{lstlisting}
 int main()
 {
@@ -48,20 +47,20 @@ In this case, the compiler failed and \verb!$?! reflects that.
 Now edit \texttt{test.c} to add a semicolon after the $5$, then recompile.
 You should not see any messages.
 
-Look in the directory, and you should see a new file called \texttt{a.out}.
+Look in the current directory, and you should see a new file called \texttt{a.out}.
 This is the default name for programs made with \texttt{gcc}. The name can be changed
-by using the ``-o'' option. 
+by using the ``-o'' option:
 
 \begin{verbatim}
 gcc test.c -o test
 \end{verbatim}
-Would produce an output file named test.
+This would produce an output file named \texttt{test}.
 \\
 Execute your program with:
 \begin{verbatim}
 ./a.out 
 \end{verbatim}
-and check that the exit status was $5$ as exepected. When c program returns from main its ``exit status'' is the value returned.
+and check that the exit status was $5$ as exepected. When a program returns from main its ``exit status'' is the value returned.
 
 Depending on your requirements, you may need to comply with some particular version of the C language standard.
 Adding one of the following to your compile line will do this.
