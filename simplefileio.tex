@@ -1,21 +1,21 @@
 \chapter{Dealing with files}
 
-In standard C, a file is represented by a \texttt{FILE *} (file pointer).
+In standard C, a file is represented by a \texttt{FILE*} (file pointer).
 The contents of this type are unimportant to the user, and you should never dereference a file pointer.
 
-To make things convenient, the standard IO streams already have a \texttt{FILE *} globally defined in the \texttt{stdio.h} header.
+To make things convenient, the standard IO streams already have a \texttt{FILE*} globally defined in the \texttt{stdio.h} header.
 Standard output is available through \texttt{stdout}, standard input is available through \texttt{stdin} and standard error is available through \texttt{stderr}.
 
 \section{Opening a file}
 
-The first thing you will need to do before you read/write to a file is to get a \texttt{FILE *} to it.
+The first thing you will need to do before you read/write to a file is to get a \texttt{FILE*} to it.
 This is done using the \texttt{fopen} function.
 
 \begin{codeinline}
-FILE *fopen(char *name, char *mode)
+FILE* fopen(char* name, char* mode)
 \end{codeinline}
 
-The function takes two arguments, \texttt{name} and \texttt{mode}, and returns a \texttt{FILE *}.
+The function takes two arguments, \texttt{name} and \texttt{mode}, and returns a \texttt{FILE*}.
 The argument \texttt{name} is self explanatory. It is a string containing the name of the file to be opened.
 The \texttt{mode} argument describes what mode you want to open the file in.
 The following \texttt{mode} values are most typical:
@@ -33,7 +33,7 @@ The following example shows how to do this.
 
 \begin{codeblock}
 /* Try and open testfile.txt for reading. */ 
-FILE *testFile = fopen("testfile.txt", "r");
+FILE* testFile = fopen("testfile.txt", "r");
 if (testFile == NULL) {
     printf("Opening file failed!\n");
 }
@@ -41,14 +41,14 @@ if (testFile == NULL) {
 
 \section{Reading from a file}
 
-If you have a \texttt{FILE *} which is opened for reading, the next thing you need to do is read from it.
+If you have a \texttt{FILE*} which is opened for reading, the next thing you need to do is read from it.
 There are a number of functions which can be used for this, however the most useful is typically \texttt{fgetc}.
 
 \begin{codeinline}
-int fgetc(FILE *file)
+int fgetc(FILE* file)
 \end{codeinline}
 
-The function takes the \texttt{FILE *} you want to read from and returns the next value in the stream.
+The function takes the \texttt{FILE*} you want to read from and returns the next value in the stream.
 One thing that is important to note here is that while the next value in the stream is always of type \texttt{char}, \texttt{fgetc} returns type \texttt{int}. 
 The reason for this is that when there is nothing left to read, the function needs a way to tell you.
 It does this by returning the value \texttt{EOF}, however it needs an extra value (outside the range of a \texttt{char}) to do this.
@@ -76,10 +76,9 @@ The \texttt{realloc} function may be useful for this.
 It may also be useful to differentiate between an empty line ending in a newline or a line only containing \texttt{EOF} (perhaps by returning \texttt{NULL}).
 
 \begin{codeblock}
-char *
-read_line(FILE *file)
+char* read_line(FILE* file)
 {
-    char *result = malloc(sizeof(char) * 80);
+    char* result = malloc(sizeof(char) * 80);
     int position = 0;
     int next = 0;
 
@@ -102,7 +101,7 @@ Fortunately this is just as easy as printing to the screen!
 All you have to do is replace \texttt{printf} with \texttt{fprintf}.
 
 \begin{codeinline}
-int fprintf(FILE *file, char *fmt, ...)
+int fprintf(FILE* file, char* fmt, ...)
 \end{codeinline}
 
 The only difference between the two is that \texttt{fprintf} allows you to specify the file that it prints to.
@@ -112,7 +111,7 @@ Writing to a file is typically expensive, so the C library tries to be smart and
 It does this by buffering all the things you've written to the file until you call the \texttt{fflush} function or close the file (coming in the next section).
 
 \begin{codeinline}
-int fflush(FILE *file)
+int fflush(FILE* file)
 \end{codeinline}
 
 While this buffering is good for performance, it can sometimes cause you to think your code is not printing something, when in fact it is just being buffered.
@@ -126,25 +125,25 @@ This is done using \texttt{fclose}.
 Closing the file also flushes any buffers associated with it if you hadn't done it already.
 
 \begin{codeinline}
-int fclose(FILE *file)
+int fclose(FILE* file)
 \end{codeinline}
 
-After calling fclose on a \texttt{FILE *} you should no longer attempt to use it again until you reassign it using \texttt{fopen}.
+After calling fclose on a \texttt{FILE*} you should no longer attempt to use it again until you reassign it using \texttt{fopen}.
 
 \section{Complete example}
 
 Below is a complete example you can run. 
 It uses concepts from above to read a line from the user and write it to the file ``testfileio.out''.
+This may be a useful starting point for completing some of the exercises later on.
 
 \begin{codeblock}
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-char *
-read_line(FILE *file)
+char* read_line(FILE* file)
 {
-    char *result = malloc(sizeof(char) * 80);
+    char* result = malloc(sizeof(char) * 80);
     int position = 0;
     int next = 0;
 
@@ -159,11 +158,10 @@ read_line(FILE *file)
     }
 }
 
-int
-main(int argc, char **argv)
+int main(int argc, char** argv)
 {
-    FILE *outputFile;
-    char *input;
+    FILE* outputFile;
+    char* input;
 
     outputFile = fopen("testfileio.out", "w");
 
@@ -173,6 +171,7 @@ main(int argc, char **argv)
     input = read_line(stdin);
 
     fprintf(outputFile, "Read \"%s\" from user!\n", input);
+    free(input); // Because we used malloc
     fflush(outputFile);
     fclose(outputFile);
 
