@@ -1,6 +1,292 @@
 
-\chapter{How to Program}
+\chapter{How to attack a spec}
 
 % Here is where we discuss how to think about programming tasks.
 % How do you decide what functions you need?
 % How do you break down a task
+
+The following is a specification for a programming task.
+You are not expected to actually code this.
+The goal instead is to look at how it could be broken into managable pieces 
+for a sane development strategy.
+
+In Section~\ref{sec:breakdown}
+
+\hrule
+
+\section{Introduction}
+Your task is to write an \emph{ANSI-C} program (called match) which
+allows the user to play a game.
+
+match will display a grid of cells, each containing a symbol.
+The user will nominate a cell (by entering its coordinates).
+If the symbol in the cell matches the symbol in
+any of the cells directly above, below, left or right, then the selected cell and any of its matching neighbours
+will be removed.
+This effect is also applied to neighbours of matching neighbours (and so on).
+As an example, suppose the grid contents (surrounded by a border) were:
+
+\begin{center}
+\begin{verbatim}
++-----+
+|ZAAAA|
+|ZBBCC|
+|ZWaaX|
+|XXXXX|
+|Zcdef|
++-----+
+\end{verbatim}
+\end{center}
+and the cell $3 1$ was chosen (that is, Row~$3$ and Column~$1$, with the top left being $0$ $0$).
+In this case, all of Row~$3$ would be removed as well as the last value on Row~$2$.
+
+\pagebreak
+\begin{center}
+\begin{verbatim}
++-----+
+|ZAAAA|
+|ZBBCC|
+|ZWaa.|
+|.....|
+|Zcdef|
++-----+
+\end{verbatim}
+\end{center}
+
+If a move leaves a gap in the middle of a column, the symbols above it will be moved down to fill the
+the gap.
+
+\begin{center}
+\begin{verbatim}
++-----+
+|.....|
+|ZAAA.|
+|ZBBCA|
+|ZWaaC|
+|Zcdef|
++-----+
+\end{verbatim}
+\end{center}
+
+If $4\:1$ was chosen, nothing would happen because the `c' in that cell is not touching any other `c's.
+If a removal leaves one or more whole columns empty, any columns to the right of the empty ones, will be
+moved over to fill the gap.
+For example, if $1\:0$ was chosen in the above, the result would be:
+
+\begin{center}
+\begin{verbatim}
++-----+
+|.....|
+|AAA..|
+|BBCA.|
+|WaaC.|
+|cdef.|
++-----+
+\end{verbatim}
+\end{center}
+
+If the grid looked like:
+\begin{center}
+\begin{verbatim}
++-----+
+|AAAAA|
+|ZABAC|
+|ZAaAX|
+|XAXAX|
+|ZAdAf|
++-----+
+\end{verbatim}
+\end{center}
+and $0\:0$ was chosen, the result would be:
+\begin{center}
+\begin{verbatim}
++-----+
+|.....|
+|ZBC..|
+|ZaX..|
+|XXX..|
+|Zdf..|
++-----+
+\end{verbatim}
+\end{center}
+
+The game ends when either all the symbols are removed, or there are no more legal moves.
+
+
+\subsection{Invocation}\label{sec:invoc}
+\noindent
+When run with no arguments, match should print usage instructions to stderr:\\
+\begin{verbatim}
+Usage: match height width filename
+\end{verbatim}
+and exit (see the error table).
+
+\texttt{height} and \texttt{width} must be positive integers greater than 1 and less than $1,000$.
+\texttt{filename} must be a path to a readable file containing a valid grid (see later) with dimensions matching \texttt{height}
+and \texttt{width}.
+See the error table for what to do if these constraints are not met.
+
+When run with valid arguments, match should read in the map file.
+It should then display the grid.
+If there are no legal moves, it should exit with the appropriate message; otherwise it should display the prompt:
+\begin{verbatim}
+>
+\end{verbatim}
+(note, a space follows the prompt).
+The user should then enter either:
+\begin{itemize}
+ \item the row and column they wish to remove (space separated). eg $3\:2$
+ \item \texttt{w} followed immediately by a filename(or path). eg \texttt{whello}
+ This will result in the current grid (including the border) being written to a file called ``hello''.
+\end{itemize}
+If there is no more input from the user, a message should be displayed (see error table) and
+the program should exit normally.
+If the user enters anything else, the prompt should be displayed again.
+
+After the user has entered a legal (non-w) move, the grid should be updated and displayed again.
+If the game is over, display the appropriate message and exit.
+If not, display the prompt again and wait for another move.
+
+\subsection{Input file format}
+A valid grid file will consist of rows of symbols (and blanks) terminated by newlines (\verb|\n|).
+You may use whichever characters you want for grid symbols except the following:
+\begin{itemize}
+ \item \verb|\0|          --- the null character. This should trigger an error in your program.
+ \item \verb|\n|   --- newlines will always be interpretted as the end of a line.
+ \item \verb|.| --- a dot indicates a blank. You can include these in your input but the gaps will not be filled until
+ a valid move has been completed.
+\end{itemize}
+
+\subsection{Errors and messages}\label{sec:errs}
+When one of the conditions in the following table happens, the program should print the error message and exit with
+the specified status.
+All error messages in this program should be sent to \emph{standard error}.
+Error conditions should be tested in the order given in the table.
+All messages are followed by a newline.
+
+\begin{center}
+\begin{tabular}{|p{4cm}|c|p{5.5cm}|}\hline
+\textbf{Condition} & \textbf{Exit Status} & \textbf{Message} \\\hline
+Program started with incorrect number of arguments & 1 & Usage: match height width filename \\\hline
+Invalid grid dimensions & 2 & Invalid grid dimensions \\\hline
+Cannot open grid file& 3 & Invalid grid file \\\hline
+Error reading grid. Eg: bad chars in input, not enough lines, short lines & 4 & Error reading grid contents \\\hline
+\end{tabular}
+\end{center}
+For a normal exit, the status will be $0$ and no special message is printed.
+
+There are a number of conditions which should cause messages to be displayed but which should not immediately terminate the program.
+These messages should also go to standard error.
+
+\begin{center}
+\begin{tabular}{|p{5.0cm}|c|p{4cm}|}\hline
+\textbf{Condition} & \textbf{Action} & \textbf{Message} \\\hline
+Error opening file for saving grid & Prompt again & Can not open file for write \\\hline
+Save of grid successful & Prompt again & Save complete \\\hline
+End of input while waiting for user input & exit program normally & End of user input \\\hline
+\end{tabular}
+\end{center}
+
+If after a move, all the symbols have been removed, the program should display ``Complete'' to stdout and exit normally.
+If the game has reached a configuration where completion is impossible and there are no more legal moves,
+the program will display ``No moves left'' to stdout and exit normally.
+
+\subsection{Compilation}
+Your code must compile with command:\\
+\texttt{gcc -Wall -ansi -pedantic ass1.c -o match}
+
+\section{Marks}
+
+\subsection{Functionality criteria}
+
+\begin{center}
+\begin{itemize}
+\item Command args --- correct response to
+\begin{itemize}
+ \item incorrect number of args
+ \item invalid dimensions
+ \item invalid grid filename
+\end{itemize}
+\item Correctly display initial grid and prompt
+\item Reject illegal moves on the initial grid
+\item Correctly process a single move:
+\begin{itemize}
+ \item Single removal from top line
+ \item Single removal of whole rightmost column
+ \item Single removal covering multiple rows/columns
+\end{itemize}
+\item Detect no more legal moves
+\item Correctly save grid
+\item Play complete games with multiple removals
+\end{itemize}
+\end{center}
+
+\hrule
+\section{Comments}\label{sec:breakdown}
+
+Reading the spec we can see some points:
+\begin{enumerate}
+ \item There is a grid which can store letters.
+ \item We don't know how big the grid needs to be until the program starts running (so no fixed sized variables).
+ \begin{itemize}
+  \item The grid does not change size once the game starts though.
+ \end{itemize}
+ \item There are rules about removing letters from the grid
+ \item There is something about files and file formats
+\item There are instructions about command line arguments.
+ \item There are instructions about error conditions and what to do when they occur.
+ \item Finally there are some sort of criteria.
+\end{enumerate}
+
+So where to start?
+It seems like taking things out of the grid seems to be important so should we start there?
+Probably not.
+When working on code, you should be thinking about how you are going to make sure that what you have written is correct.
+That is, ``how are you going to test that it complies with the spec?''
+Do not fall for the idea that you can just test everything at the end and it will be less work\footnote{This is almost always wrong.}.
+The more code you need to search, the harder finding bugs will be.
+
+A better approach is to try to look for smaller chunks of functionality.
+That you can write \emph{and test} without needing lots of other code you don't have yet.
+When you have completed (and tested) a new chunk of functionality, record that version somewhere (eg in version control)
+and then move on.
+
+For example, look at the command line argument checking.
+In Section~\ref{sec:invoc} it says that you need to display a message when the program is run with no arguments.
+This is easy to write and check:
+\begin{itemize}
+ \item Run with no arguments and check message.
+ \item Run with arguments and no message.
+\end{itemize}
+
+Section~\ref{sec:errs} describes some extra errors you need to check to do with command line arguments.
+Some have to do with processing the contents of a file, so that might need to wait, but the rest of them
+should be reasonable.
+Again, test each possibility and save that version.
+The reason for storing your code after each bit works is that if you break it later\footnote{This raises
+another point. Just because something worked before doesn't necessarily mean it still does.
+You will want to recheck earlier tests from time to time as well. This is where
+automated testing (sometimes mistakenly called unit testing) can be useful.} (adding more features, you have a 
+working version you can go back to).
+
+Now you should have some code you can rely on (and you can easily specify different sizes when testing other parts later).
+
+What to do next may be a bit less obvious.
+You could try the file reading code (checking for errors) but you don't have anywhere to put any grid information once you've
+read it.
+In fact, the next thing to do would probably be the representation of the grid but how to test it?
+So you would need to work out how to to store the grid \emph{and} how to display it.
+Start with creating and displaying a blank grid.
+Then try modifying the grid in code and displaying again to see if things appear in the correct place.
+This last point, can only be a temporary modification since a working program would not do this, so remove it once you 
+are sure it works\footnote{Another strategy you can employ is to have one or more files which have your functions in them and then
+use another file which has test functions in it and call the normal functions from there.}.
+
+Following from there you have a number of options.
+Removal of letters? Saving? Loading? Game over detection?
+The first two are possible, but you would need to add test code to create various board states to test with, so being able 
+to have your testing states in files and pulling them in with load would seem to be easier.
+
+When it comes to dealing with removing letters, rather than trying to solve the whole thing in one go.
+Try to identify simple subcases, eg an entire column is removed and build up from there.
+
