@@ -20,7 +20,7 @@ struct myStruct {
     int a;
     char b;
     int *c;
-}
+};
 \end{codeblock}
 
 \section{Declaring and accessing members}
@@ -39,18 +39,18 @@ If you have a variable of type struct something, then you can access the members
 For example using \texttt{var1} from above we could have
 
 \begin{codeblock}
-int x = var1.a
-char y = var1.b
-int *z = var1.c
+int x = var1.a;
+char y = var1.b;
+int *z = var1.c;
 \end{codeblock}
 
 If you have a pointer to a struct, then you can access the members using the \texttt{->} operator.
 For example using \texttt{var2} from above
 
 \begin{codeblock}
-int x = var2->a
-char y = var2->b
-int *z = var2->c
+int x = var2->a;
+char y = var2->b;
+int *z = var2->c;
 \end{codeblock}
 
 You can also assign to struct members using the same syntax.
@@ -107,7 +107,7 @@ struct node {
     int a;
     int b;
     struct node *next;
-}
+};
 \end{codeblock}
 
 \section{The size of a struct}
@@ -131,6 +131,6 @@ You may find that the size of the struct below is actually 8 bytes.
 struct s {
     char a; // 1 byte
     int b; // 4 bytes
-}
+};
 \end{codeblock}
 
