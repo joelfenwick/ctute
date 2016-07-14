@@ -11,9 +11,9 @@ Standard output is available through \texttt{stdout}, standard input is availabl
 The first thing you will need to do before you read/write to a file is to get a \texttt{FILE *} to it.
 This is done using the \texttt{fopen} function.
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 FILE *fopen(char *name, char *mode)
-\end{lstlisting}
+\end{codeinline}
 
 The function takes two arguments, \texttt{name} and \texttt{mode}, and returns a \texttt{FILE *}.
 The argument \texttt{name} is self explanatory. It is a string containing the name of the file to be opened.
@@ -31,22 +31,22 @@ When using \texttt{fopen}, failure is reported by returning \texttt{NULL}.
 You should always check the return value before continuing.
 The following example shows how to do this.
 
-\begin{lstlisting}
+\begin{codeblock}
 /* Try and open testfile.txt for reading. */ 
 FILE *testFile = fopen("testfile.txt", "r");
 if (testFile == NULL) {
     printf("Opening file failed!\n");
 }
-\end{lstlisting}
+\end{codeblock}
 
 \section{Reading from a file}
 
 If you have a \texttt{FILE *} which is opened for reading, the next thing you need to do is read from it.
 There are a number of functions which can be used for this, however the most useful is typically \texttt{fgetc}.
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 int fgetc(FILE *file)
-\end{lstlisting}
+\end{codeinline}
 
 The function takes the \texttt{FILE *} you want to read from and returns the next value in the stream.
 One thing that is important to note here is that while the next value in the stream is always of type \texttt{char}, \texttt{fgetc} returns type \texttt{int}. 
@@ -55,7 +55,7 @@ It does this by returning the value \texttt{EOF}, however it needs an extra valu
 By returning an \texttt{int} it as able to do this, however you must be careful to never directly assign the result of \texttt{fgetc} to a \texttt{char}.
 The example below shows how to correctly read a character using \texttt{fgetc}.
 
-\begin{lstlisting}
+\begin{codeblock}
 int next = fgetc(stdin);
 char result;
 if (next == EOF) {
@@ -64,7 +64,7 @@ if (next == EOF) {
 } else {
   result = (char)next;
 }
-\end{lstlisting}
+\end{codeblock}
 
 Often in your program you will want to read a line of text from the file, not just a single character.
 It is helpful in this instance to write a small function that does this which you can reuse later on.
@@ -75,7 +75,7 @@ This example uses a fixed size buffer, it is up to the user to work out how to m
 The \texttt{realloc} function may be useful for this.
 It may also be useful to differentiate between an empty line ending in a newline or a line only containing \texttt{EOF} (perhaps by returning \texttt{NULL}).
 
-\begin{lstlisting}
+\begin{codeblock}
 char *
 read_line(FILE *file)
 {
@@ -93,7 +93,7 @@ read_line(FILE *file)
         }
     }
 }
-\end{lstlisting}
+\end{codeblock}
 
 \section{Writing to a file}
 
@@ -101,9 +101,9 @@ Being able to write to a file is just as important as being able to read from a 
 Fortunately this is just as easy as printing to the screen!
 All you have to do is replace \texttt{printf} with \texttt{fprintf}.
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 int fprintf(FILE *file, char *fmt, ...)
-\end{lstlisting}
+\end{codeinline}
 
 The only difference between the two is that \texttt{fprintf} allows you to specify the file that it prints to.
 
@@ -111,9 +111,9 @@ There is one issue that you must be aware of when writing to files, and that is 
 Writing to a file is typically expensive, so the C library tries to be smart and avoid doing it whenever possible.
 It does this by buffering all the things you've written to the file until you call the \texttt{fflush} function or close the file (coming in the next section).
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 int fflush(FILE *file)
-\end{lstlisting}
+\end{codeinline}
 
 While this buffering is good for performance, it can sometimes cause you to think your code is not printing something, when in fact it is just being buffered.
 In general, whenever you want something to appear in the file (this could be stdout), you should \texttt{fflush} it after printing.
@@ -125,9 +125,9 @@ When you're finished with a file, it is good practice to close it and free up it
 This is done using \texttt{fclose}.
 Closing the file also flushes any buffers associated with it if you hadn't done it already.
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 int fclose(FILE *file)
-\end{lstlisting}
+\end{codeinline}
 
 After calling fclose on a \texttt{FILE *} you should no longer attempt to use it again until you reassign it using \texttt{fopen}.
 
@@ -136,7 +136,7 @@ After calling fclose on a \texttt{FILE *} you should no longer attempt to use it
 Below is a complete example you can run. 
 It uses concepts from above to read a line from the user and write it to the file ``testfileio.out''.
 
-\begin{lstlisting}
+\begin{codeblock}
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -180,4 +180,4 @@ main(int argc, char **argv)
 
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}

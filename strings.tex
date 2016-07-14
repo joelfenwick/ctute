@@ -14,21 +14,21 @@ The \emph{null terminator} is not counted as part of the length of the string.
 
 For example:
 
-\begin{lstlisting}
+\begin{codeblock}
 char single[2];
 single[0] = 'A';
 single[1] = '\0';
-\end{lstlisting}
+\end{codeblock}
 
 would make \texttt{single}, the same as \verb!"A"!.
 Note the use of \verb!'! around characters and \verb!"! to mark strings.
 
 On the other hand,
-\begin{lstlisting}
+\begin{codeblock}
 char single[2];
 single[0] = 'A';
 single[1] = 'B';
-\end{lstlisting}
+\end{codeblock}
 would not make \texttt{single} store \verb!"AB"!, rather it is not storing a proper string at all\footnote{It is actually worse than that.
 The most we can say, is that we can't tell whether single stores \texttt{"AB"} or not.
 This is because we don't know what follows the array in memory.
@@ -39,7 +39,7 @@ Important note: while strings are stored in arrays of char, that does not mean a
 Because strings are stored in arrays, it does not make sense to compare them with \texttt{==}.
 Instead, we use standard string functions from \lstinline{<string.h>}.
 Compile and run the following program:
-\begin{lstlisting}
+\begin{codeblock}
 #include <string.h>
 #include <stdio.h>
 
@@ -53,15 +53,15 @@ int main(int argc, char** argv) {
         ==%d\n", (msg == "hw"), strcmp(msg, "hw"));
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}
 
 In this case, both comparing with \texttt{==} and comparing with the string compare function (\texttt{strcmp}) both give zero/\lstinline!false!.
 However, we need to be clear about what \texttt{strcmp} returns.
-\begin{lstlisting}
+\begin{codeblock}
 strcmp("B", "A") == -1 // arguments are in reverse order
 strcmp("B", "B") == 0  // arguments are the same
 strcmp("A", "B") == 1  // arguments are in correct order
-\end{lstlisting}
+\end{codeblock}
 That is, strcmp returns \emph{0} if strings are the same.
 
 To copy strings, use \texttt{strcpy}:
@@ -78,16 +78,16 @@ Undefined and unpredictable behaviour like this can be very hard to find and deb
 
 What if you want to put numbers into a string? 
 The simplest way is with \emph{s}\texttt{printf}:
-\begin{lstlisting}
+\begin{codeblock}
 char buffer[20];
 sprintf(buffer, "%d + %d == %d", 3, 5, 3 + 5);
-\end{lstlisting}
+\end{codeblock}
 Will result in \texttt{buffer} storing \lstinline!"3 + 5 == 8"!.
 As with all standard functions which modify strings, \texttt{sprintf} will put a \lstinline!'\0'! on the end of the string it makes.
 There is also an \texttt{sscanf} to read values out of a string instead of from a \texttt{FILE*}.
 
 If you are making a string which will be passed outside the current function, it is better to use dynamic arrays:
-\begin{lstlisting}
+\begin{codeblock}
 char* getMessage1(void) {
     char* msg = malloc(sizeof(char) * 11);
     sprintf(msg, "%d + %d == %d", 3, 5, 3 + 5);
@@ -99,7 +99,7 @@ char* getMessage2(void) {
     sprintf(msg, "%d + %d == %d", 3, 5, 3 + 5);
     return msg;		// returning pointer to local variable
 }
-\end{lstlisting}
+\end{codeblock}
 
 \texttt{getMessage2} is dangerous because the memory used for array \texttt{msg} be used for other things once the function returns.
 Since \texttt{getMessage1} allocates it's memory is on the heap and so won't be reused until it is \texttt{free}d.

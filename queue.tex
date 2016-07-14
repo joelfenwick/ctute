@@ -10,23 +10,23 @@ Contrasted with a stack where the next item to come off the stack is the most re
 
 For this example, we'll make our queue store \texttt{int}s.
 
-\begin{lstlisting}
+\begin{codeblock}
 struct queue_node {
     int data;
     struct queue_node* next;
 };
-\end{lstlisting}
+\end{codeblock}
 
 Here we have started to define a struct and put a pointer to another struct of the same type inside it.
 This is legal in C because as soon the compiler sees \texttt{struct queue\_node}, it will accept mentions of \texttt{struct queue\_node}
 as a type. However, while we can do the above, we can't do this:
 
-\begin{lstlisting}
+\begin{codeblock}
 struct queue_node {
     int data;
     struct queue_node next;
 };
-\end{lstlisting}
+\end{codeblock}
 That is, declarare a struct which contains itself (note the lack of pointer).
 \footnote{The compiler won't let you actually declare a variable of a 
 struct type until it can work out how big it is (which it doesn't know until the closing \}).}
@@ -36,16 +36,16 @@ struct type until it can work out how big it is (which it doesn't know until the
 Using this we can have no items in the queue:
 \lstinline!struct queue_node* q=0;!
 one item in the queue:
-\begin{lstlisting}
+\begin{codeblock}
 q=malloc(sizeof(struct queue_node));
 q->data=7;
-\end{lstlisting}
+\end{codeblock}
 or more than multiple items:
-\begin{lstlisting}
+\begin{codeblock}
 struct queue_node* t=malloc(sizeof(struct queue_node));
 t->data=8;
 q->next=t;
-\end{lstlisting}
+\end{codeblock}
 all via a single pointer variable.
 In this case: \lstinline!q->data==7! and \lstinline!q->next->data==8!.
 
@@ -60,13 +60,13 @@ This brings up an important point.
 It is critical that the end of linked data structures be properly indicated.
 In this case setting the \texttt{next} member to \texttt{0}.
 If this ``invariant'' is preserved, you could output all the items in a queue like this:
-\begin{lstlisting}
+\begin{codeblock}
 struct queue* t=q;
 while (t!=0) {
     printf("%d\n", t->data);
     t=t->next;
 }
-\end{lstlisting}
+\end{codeblock}
 
 \todo{instruction: stop and make sure you understand exactly what the above does.}
 
@@ -82,39 +82,39 @@ Here are some examples:
 
 Now we'll add a nicer interface around the queue\_node to make it easier to use.
 
-\begin{lstlisting}
+\begin{codeblock}
 struct queue {
     struct queue_node* head;
     struct queue_node* tail;
 };
-\end{lstlisting}
+\end{codeblock}
 
 As an optional feature, we could use a \texttt{typedef} to shorten the name.
-\begin{lstlisting}
+\begin{codeblock}
 typedef struct queue queue;
-\end{lstlisting}
+\end{codeblock}
 
 Since the queue involves memory allocation, we should have setup and teardown/cleanup functions.
-\begin{lstlisting}
+\begin{codeblock}
 void init_queue(queue* q);
 void free_queue(queue* q);
-\end{lstlisting}
+\end{codeblock}
 The \lstinline!init_queue()! function assumes that you have already has a queue struct but that it has not been initialised yet.
-\begin{lstlisting}
+\begin{codeblock}
 queue q;
 init_queue(&q);
-\end{lstlisting}
+\end{codeblock}
 
 As an alternative, you could have a function which allocates a queue as well: \lstinline!queue* alloc_queue()!.
 Other functions we will need are:
-\begin{lstlisting}
+\begin{codeblock}
 void add_queue(queue* q, int i);
 int get_queue(queue* q);
-\end{lstlisting}
+\end{codeblock}
 
 Notice that this interface doesn't mention malloc even though we know it will be using it.
 Let's provide the implementation for these functions.
-\begin{lstlisting}
+\begin{codeblock}
 void init_queue(queue* q) {
     q->head=0;
     q->tail=0;
@@ -129,10 +129,10 @@ void free_queue(queue* q) {
         free(temp);
     }
 }
-\end{lstlisting}
+\end{codeblock}
 
 We will add new elements to the end (tail) of the queue and remove items from the front (head) of the queue.
-\begin{lstlisting}
+\begin{codeblock}
 void add_queue(queue* q, int d) {
       // don't forget the special case of an empty queue
     if (q->head==0) {	
@@ -165,7 +165,7 @@ int get_queue(queue* q) {
     return result;
 }
 
-\end{lstlisting}
+\end{codeblock}
 
 
 

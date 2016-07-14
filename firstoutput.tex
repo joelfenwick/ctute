@@ -3,18 +3,21 @@
 
 
 Compile and run the following:
-\begin{lstlisting}
+\begin{codeblock}
 #include <stdio.h>
 
 int main(int argc, char** argv) {
     printf("Going to print some things %s%s%s\n");
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}
 
 Although you \emph{can} just print strings directly with printf, it isn't necessarily a good idea (as shown above)\footnote{\texttt{puts()} is probably a better option}.
 To understand why, we need to look at how \texttt{printf} deals with variables.
-Replace Line~$4$ with \lstinline!printf("%s\n", "Going to print some things %s%s%s ");!
+Replace Line~$4$ with
+\begin{codeinline}
+printf("%s\n", "Going to print some things %s%s%s ");
+\end{codeinline}
 
 The first parameter of \texttt{printf} describes what is to be printed: any sequence starting with \% is called a placeholder and will be replaced with something else when the output is printed.
 Characters after the \% indicate what type of thing is to be printed (and possibly how it is to be formatted).
@@ -28,7 +31,7 @@ To print a \% symbol, use \%\%.
 
 
 Compile the following:
-\begin{lstlisting}
+\begin{codeblock}
 #include <stdio.h>
 
 int main(int argc, char** argv) {
@@ -36,7 +39,7 @@ int main(int argc, char** argv) {
       argc, argv[0]);
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}
 Lines~4 and 5 show that you can break lines to improve layout and readability.
 Try running the program with a variety of command line arguments.
 You will see that \texttt{argv[0]} contains the name of the program (\texttt{argv} stands for ``argument values") and that \texttt{argc} gives the ``argument count'' --- how many there were.
@@ -45,7 +48,7 @@ But change the program to print \texttt{argv[200]} and see what happens.
 
 
 By using a conditional statement, we can safely print more if it is available.
-\begin{lstlisting}
+\begin{codeblock}
 #include <stdio.h>
 
 int main(int argc, char** argv) {
@@ -58,7 +61,7 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}
 Some type of loop would be a better way to deal with this, so let's do that now.
 
 \section{Loops}
@@ -81,34 +84,34 @@ So to display command line arguments:
 C has three types of loop structure:
 
 The \emph{for} loop:
-\begin{lstlisting}
+\begin{codeblock}
 for (Setup ; Test ; Update) {
     Body
 }
-\end{lstlisting}
+\end{codeblock}
 
 The \emph{while} loop:
-\begin{lstlisting}
+\begin{codeblock}
 Setup
 while (Test) {
     Body
     Update
 }
-\end{lstlisting}
+\end{codeblock}
 
 and the \emph{do-while} loop:
-\begin{lstlisting}
+\begin{codeblock}
 Setup
 do {
     Body
     Update
 } while(Test);
-\end{lstlisting}
+\end{codeblock}
 
 The \emph{do-while} loop differs from the \emph{while} loop by always running the Body and Update once before the Test is performed and the loop loops.
 
 So we could do this:
-\begin{lstlisting}
+\begin{codeblock}
 #include <stdio.h>
 
 int main(int argc, char** argv) {
@@ -117,6 +120,6 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
-\end{lstlisting}
+\end{codeblock}
 
 As an exercise, rewrite the above to use \texttt{while} and then to use \texttt{do-while}.

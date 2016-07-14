@@ -1,6 +1,8 @@
 \documentclass[a4paper,10pt]{book}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
+\usepackage{textcomp}
+\usepackage{color}
 \usepackage{hyperref}
 \usepackage{graphicx}
 
@@ -25,7 +27,22 @@
 
 
 \newcommand{\todo}[1]{\textbf{#1}}
-\lstset{numbers=left, showstringspaces=false, frame=l}
+\lstset{basicstyle=\ttfamily,
+	columns=flexible, % To convince it to do the right thing with quotes
+	language=C,
+	upquote=true,
+	showstringspaces=false,
+	escapechar=~,
+	keywordstyle=\color[rgb]{0,0,1},
+	commentstyle=\color[rgb]{0.133,0.545,0.133},
+	stringstyle=\color[rgb]{0.627,0.126,0.941}
+}
+\lstnewenvironment{codeblock}{\lstset{
+		numbers=left,
+		frame=l}}{}
+\lstnewenvironment{codeinline}{\lstset{
+		frame=none,
+		numbers=none}}{}
 
 \begin{document}
 

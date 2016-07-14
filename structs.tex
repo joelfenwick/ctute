@@ -15,43 +15,43 @@ The syntax for defining a struct is shown below.
 This defines a struct whose name is myStruct.
 The struct contains 3 members, an \texttt{int} called \texttt{a}, a \texttt{char} called \texttt{b} and an \texttt{int *} called \texttt{c}.
 
-\begin{lstlisting}
+\begin{codeblock}
 struct myStruct {
     int a;
     char b;
     int *c;
 }
-\end{lstlisting}
+\end{codeblock}
 
 \section{Declaring and accessing members}
 
 Structs can be used in place of any other type.
 This means you can have a struct variable, and also a struct pointer, shown below.
 
-\begin{lstlisting}
+\begin{codeblock}
 /* var1 is of type struct myStruct */
 struct myStruct var1; 
 /* var2 is of type struct myStruct pointer */
 struct myStruct *var2; 
-\end{lstlisting}
+\end{codeblock}
 
 If you have a variable of type struct something, then you can access the members using the \texttt{.} operator.
 For example using \texttt{var1} from above we could have
 
-\begin{lstlisting}
+\begin{codeblock}
 int x = var1.a
 char y = var1.b
 int *z = var1.c
-\end{lstlisting}
+\end{codeblock}
 
 If you have a pointer to a struct, then you can access the members using the \texttt{->} operator.
 For example using \texttt{var2} from above
 
-\begin{lstlisting}
+\begin{codeblock}
 int x = var2->a
 char y = var2->b
 int *z = var2->c
-\end{lstlisting}
+\end{codeblock}
 
 You can also assign to struct members using the same syntax.
 
@@ -68,7 +68,7 @@ As a general rule, if you're passing a struct to a function it's likely you want
 As was previously mentioned in the pointers section, a pointer lets the function know where \emph{your} copy of the stuct it and allows it to update it.
 The follow example demonstrates how this works.
 
-\begin{lstlisting}
+\begin{codeblock}
 void
 structFunc(struct myStruct *s)
 {
@@ -87,7 +87,7 @@ otherFunc(void)
     structFunc(&s); // make a pointer to s
     printf("s.a after: %d\n", s.a); // prints 10
 }
-\end{lstlisting}
+\end{codeblock}
 
 \section{Self referencing structs}
 
@@ -102,13 +102,13 @@ Consider the example below.
 We have a struct type called \texttt{node} which has 2 ints and then a pointer to another struct of the same type.
 You will see how this can be used to implement useful data structures in a later section.
 
-\begin{lstlisting}
+\begin{codeblock}
 struct node {
     int a;
     int b;
     struct node *next;
 }
-\end{lstlisting}
+\end{codeblock}
 
 \section{The size of a struct}
 
@@ -116,9 +116,9 @@ In the above section we mentioned the compiler computing the size of a struct.
 If you want to use the malloc rule that was introduced early, you need to be able to find the size of the struct in bytes.
 Fortunately this works just like every other type!
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 struct myStruct *s = malloc(sizeof(stuct myStruct) * 1);
-\end{lstlisting}
+\end{codeinline}
 
 One thing you need to be careful of when working with structs is making assumptions about how big it will end up being.
 Consider the example below.
@@ -127,10 +127,10 @@ Modern CPU's in general require data to be aligned on certain memory address bou
 You should always ask the compiler using \texttt{sizeof} because it is the one who ultimately decides the size that is best for the CPU your code is running on.
 You may find that the size of the struct below is actually 8 bytes.
 
-\begin{lstlisting}
+\begin{codeblock}
 struct s {
     char a; // 1 byte
     int b; // 4 bytes
 }
-\end{lstlisting}
+\end{codeblock}
 

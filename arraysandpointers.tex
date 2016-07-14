@@ -8,9 +8,9 @@ Arrays are also an important aspect to a programming language, and C has these a
 
 Given a type \texttt{T}, you declare an array of \texttt{T} using square brackets as follows:
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 T array[numElements];
-\end{lstlisting}
+\end{codeinline}
 
 Where \texttt{numElements} is the number of elements you want in the array.
 Note than until C99, numElements had to be a compile time constant.
@@ -20,10 +20,10 @@ This is not always possible, and how to deal with that will be covered later in 
 Below are some example array declarations.
 These also show how you can make arrays of arrays.
 
-\begin{lstlisting}
+\begin{codeblock}
 int nums[6]; // Array of 6 ints
 int 2dNums[3][4]; // Array of 3 arrays of 4 ints
-\end{lstlisting}
+\end{codeblock}
 
 \section{Indexing an array}
 
@@ -31,10 +31,10 @@ In C, arrays use 0-based indexing, which means that the first element in the arr
 Indexing is done using square brackets similar to how the array were declared.
 The example below shows how the arrays declared above could be indexed.
 
-\begin{lstlisting}
+\begin{codeblock}
 nums[3] = 0; // 4th element of nums = 0
 2dNums[1][2] = 0; // 2nd row, 3rd column of 2dNums
-\end{lstlisting}
+\end{codeblock}
 
 \section{Getting the size of an array}
 
@@ -64,11 +64,11 @@ The * binds to the variable \emph{name}, not the type!
 This is a common way people get tricked on exams.
 A pointer can also point to another pointer.
 
-\begin{lstlisting}
+\begin{codeblock}
 int *p; // Pointer to int
 int** p1; // Pointer to a pointer to an int
 int* x, y; // x is pointer to int, y is int!
-\end{lstlisting}
+\end{codeblock}
 
 \subsection{Getting the address of something}
 
@@ -76,19 +76,19 @@ There are two ways you can get the address of something.
 The first is to steal it from somebody else.
 If you already have a pointer variable, you can assign it to another variable just like you would any other type.
 
-\begin{lstlisting}
+\begin{codeblock}
 int* p = doSomething(); // Returns an int *
 int* p1 = p; // p1 points to the same thing p does.
-\end{lstlisting}
+\end{codeblock}
 
 The other way is to task the compiler where it put something.
 You can do this with the \texttt{\&} operator.
 \texttt{\&variable} reads as ``Give me the address of \texttt{variable}''.
 
-\begin{lstlisting}
+\begin{codeblock}
 int x = 10;
 int* p = &x; // We would say p points to x
-\end{lstlisting}
+\end{codeblock}
 
 \subsection{What does it actually point to?}
 
@@ -97,19 +97,19 @@ This is called \emph{dereferencing}, and we use the \texttt{*} operator for this
 \texttt{*p}, where \texttt{p} is a pointer, says ``get me the value at the address this thing points to''.
 For example:
 
-\begin{lstlisting}
+\begin{codeblock}
 int x = 10;
 int* p = &x; // We would say p points to x
 int y = *p; // y = 10, because p points to x
-\end{lstlisting}
+\end{codeblock}
 
 As well as getting the value of the thing it points to, we can also use a pointer to change that value.
 
-\begin{lstlisting}
+\begin{codeblock}
 int x = 10;
 int* p = &x; // We would say p points to x
 *p = 5; // x = 5, because p points to x
-\end{lstlisting}
+\end{codeblock}
 
 \section{Dynamically sized array}
 
@@ -122,17 +122,17 @@ Fortunately the designers of the language thought about this, and included metho
 
 If you want to allocate memory, you can use the \texttt{malloc} function. 
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 void* malloc(size_t size)
-\end{lstlisting}
+\end{codeinline}
 
 The \texttt{size} argument is the size in \emph{bytes} you want to allocate.
 That bit about \emph{bytes} is very important.
 You \textbf{must} follow the following pattern whenever you allocate memory unless you really know what you're doing.
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 T* mem = malloc(sizeof(T) * numElements);
-\end{lstlisting}
+\end{codeinline}
 
 Here we see that mem will be a pointer to a chunk of memory large enough to hold \texttt{numElements} of type \texttt{T}.
 This is exactly what we needed for an array!
@@ -142,12 +142,12 @@ Of course memory allocation does come at a cost, and that cost is you now have t
 It is up to you, the programmer, to keep track of the memory, and when you're done with it you must give it back to the system.
 You can give memory back by calling \texttt{free} on the original pointer given to you by malloc.
 
-\begin{lstlisting}
+\begin{codeblock}
 /* Pointer to memory for 5 ints */
 int* mem = malloc(sizeof(int) * 5);
 doSomething(mem); // Do something with it
 free(mem); // Now we're done give it back
-\end{lstlisting}
+\end{codeblock}
 
 Not freeing your memory after you're done may not cause any immediate problems, but every system resource is finite and eventually you will run out.
 When this happens your program will probably crash, which is not desirable.
@@ -161,38 +161,38 @@ So now we know how we can get a pointer to some memory that looks exactly like o
 The solution to this is pointer arithmetic.
 This is best explained with an example
 
-\begin{lstlisting}
+\begin{codeblock}
 /* Pointer to memory for 5 ints */
 int* mem = malloc(sizeof(int) * 5); 
 int* first = mem + 0; // Pointer to first element 
 int* second = mem + 1; // Pointer to second element
-\end{lstlisting}
+\end{codeblock}
 
 The key thing here is we did \texttt{+ 1}, not \texttt{+ sizeof(int)} like you may expect.
 When adding to a pointer, it will automatically increment by the correct number of bytes for the base types size.
 
 So if we want to access the value of the second int in out new array, we would have to do something like:
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 int second = *(mem + 1); // Deref second element
-\end{lstlisting}
+\end{codeinline}
 
 This is cumbersome, fortunately the language designers thought so too, and so they allowed the array indexing syntax to also work for pointers.
 Note that this gives you the \emph{value} associated with the second element.
 If you want a pointer to the second element you must use arithmetic shown above or use the \texttt{\&} operator, also shown below.
 
-\begin{lstlisting}[numbers=none,frame=none]
+\begin{codeinline}
 int second = mem[1]; // Equivalent to code above!
 int* secondPointer = \&mem[1]; // Address of second elem
-\end{lstlisting}
+\end{codeinline}
 
 We can also do assignment in just the same way.
 
-\begin{lstlisting}
+\begin{codeblock}
 /* These are both the same */
 *(mem + 1) = 1;
 mem[1] = 1; 
-\end{lstlisting}
+\end{codeblock}
 
 \subsection{Multidimensional Dynamic Array}
 
@@ -200,7 +200,7 @@ Often you will need to have more than one dimension in your array, and doing the
 The following example shows how to allocate a two dimensional array using \texttt{malloc}.
 Note how the convention for mallocing properly from above is followed here! 
 
-\begin{lstlisting}
+\begin{codeblock}
 int rows = 10;
 int cols = 20;
 
@@ -208,7 +208,7 @@ int** arr = malloc(sizeof(int *) * rows);
 for (int i = 0; i < rows; ++i) {
     arr[i] = malloc(sizeof(int) * cols);
 }
-\end{lstlisting}
+\end{codeblock}
 
 Now you should know everything you need to allocate an array dynamically.
 Also note that you can always allocate an array with size 1 if you only need 1 element!
@@ -224,7 +224,7 @@ The example below shows how to pass an array to a function (full function syntax
 The important thing in this example is you always need to pass the size of the array to the function, because as was said earlier, there is no way to know the size of the memory that the pointer points to automatically.
 If you know for sure the size you are passing (maybe it's always 1), then you could omit the size argument.
 
-\begin{lstlisting}
+\begin{codeblock}
 void arrayFunc(int *arr, int size)
 {
     ...
@@ -236,7 +236,7 @@ void someFunc(void)
     int arr[20];
     otherFunc(arr, 20);
 }
-\end{lstlisting}
+\end{codeblock}
 
 \section{Returning an array from a function}
 
@@ -249,7 +249,7 @@ If you want to return an array, you \textbf{must} allocate it dynamically using 
 The downside is you then need a way to also return the size of the newly allocated array.
 You can do this using a pointer argument to the function, as shown below.
 
-\begin{lstlisting}
+\begin{codeblock}
 int* arrayAllocator(int *size)
 {
     int* array = malloc(sizeof(int) * 20);
@@ -269,4 +269,4 @@ void someFunc(void)
     array = arrayAllocator(&size);
     printf("Array of size %d was allocated\n", size);
 }
-\end{lstlisting}
+\end{codeblock}
