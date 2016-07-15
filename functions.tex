@@ -9,12 +9,15 @@ If no body is given, the declaration should be followed by a semi-colon.
 
 So \lstinline!void show_greeting(void);!  is just a declaration.
 It tells the compiler that the \texttt{show\_greeting} function exists but not how to do it.
-\begin{lstinline}
+
+In contrast,
+\begin{codeinline}
 void show_greeting(void) {
     printf("Hello\\n");
 }
-\end{lstinline}
-Is a definition (which also counts as a declaration).
+\end{codeinline}
+
+\noindent is a definition (which also counts as a declaration).
 
 Unlike many other languages, to tell the compiler that a function has no parameters, you 
 need to write \lstinline!(void)! for the parameter list instead of just \lstinline!()!.
