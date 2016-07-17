@@ -34,7 +34,6 @@ We could loop through the array and assign each element to something sensible, o
 \begin{codeblock}
 int a[4] = { 0, 1, 5, 6 }; // All elements are initialized
 int b[4] = { 4, 3 }; // Remaining elements are initialized to 0
-int c[4] = { }; // All elements are initialized to 0
 int d[] = { 8, 7, 9, 2 }; // We can leave off the size if
                              // we initialize every element
 \end{codeblock}
@@ -42,7 +41,7 @@ int d[] = { 8, 7, 9, 2 }; // We can leave off the size if
 \section{Indexing an array}
 
 In C, arrays use 0-based indexing, which means that the first element in the array is at index 0.
-Indexing is done using square brackets, similar to how the arrays were declared.
+Indexing is also done using square brackets.
 The arrays declared above could be indexed as follows:
 
 \begin{codeblock}
@@ -91,7 +90,7 @@ Notice that we wrote \lstinline!firstElement + 1! above; while memory addresses 
 When using pointer arithmetic, C will always figure out how many bytes it should add to or subtract from the pointer to move the correct number of elements along.
 
 This is a very convenient pattern, and it turns out to not be a mere coincidence.
-Indexing an array and performing pointer arithmetic are the exact same thing!
+Indexing an array and performing pointer arithmetic are the exact same thing\footnote{Technically, some compilers may optimise them differently, but we'll ignore that here.}!
 Remember that an array is really just a block of memory --- there is no better way to refer to it than by the memory address it starts at, and this is what C does.
 When we declare an array \lstinline!T array[n]!, the variable \lstinline!array! can be used as a pointer to the start of the array's memory, which is also the address of its first element.
 This means that where we were previously using \lstinline!&array[0]! we can now just use \lstinline!array!.
@@ -119,7 +118,7 @@ void* malloc(size_t size)
 \lstinline!void*! is a new construct to us.
 Without the pointer, \lstinline!void! means that a function does not return any value, or does not take arguments (depending on context).
 A \emph{void pointer} has a different meaning --- it is a pointer which points to memory of an unknown or undecided type.
-C will automatically convert a void pointer to another pointer type if required.
+C will automatically convert a pointer to any sort of value into a void pointer.
 
 The \texttt{size} argument is the size in \emph{bytes} of the memory you want to allocate.
 That bit about \emph{bytes} is very important.
