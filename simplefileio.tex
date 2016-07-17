@@ -104,7 +104,7 @@ All you have to do is replace \texttt{printf} with \texttt{fprintf}.
 int fprintf(FILE* file, char* fmt, ...)
 \end{codeinline}
 
-The only difference between the two is that \texttt{fprintf} allows you to specify the file that it prints to.
+The main difference between the two is that \texttt{fprintf} allows you to specify the file that it prints to.
 
 There is one issue that you must be aware of when writing to files, and that is \emph{buffering}. 
 Writing to a file is typically expensive, so the C library tries to be smart and avoid doing it whenever possible.
@@ -141,6 +141,8 @@ This may be a useful starting point for completing some of the exercises later o
 #include <stdio.h>
 #include <string.h>
 
+// Question for reader: is this equivalent to the standard
+// function fgets()?
 char* read_line(FILE* file)
 {
     char* result = malloc(sizeof(char) * 80);
