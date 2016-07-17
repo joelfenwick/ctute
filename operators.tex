@@ -66,8 +66,8 @@ For example:
 \texttt{2/3.0} will give a floating point result because one of its arguments is floating point\footnote{Somewhat confusingly, the default floating point type in C is \texttt{double} not \texttt{float}.}.
 You could also achieve this with a \emph{cast}: \texttt{2/(float)3} or multiplication \texttt{(1.0*2)/3}.
 
- \item Signed vs Unsigned --- integer types can be restricted to store only positive values\footnote{and therefore store higher maximum values using the same number of bits because the sign bit can be used for value storage.}
- For example: \texttt{unsigned int}, \texttt{unsigned char}\footnote{\texttt{int} defaults to \texttt{signed int} but if you care whether your \texttt{char}s are signed or unsigned, it is better to be explicit.}
+ \item Signed vs Unsigned --- integer types can be restricted to store only positive values\footnote{and therefore store higher maximum values using the same number of bits because the sign bit can be used for value storage.}.
+ For example: \texttt{unsigned int}, \texttt{unsigned char}\footnote{\texttt{int} defaults to \texttt{signed int} but if you care whether your \texttt{char}s are signed or unsigned, it is better to be explicit.}.
  
  \item size --- types can be modified to indicate how much memory they take\footnote{In C, these modifications are not absolutely defined in the standard.}. 
  Types which take more memory can store a larger range of values.

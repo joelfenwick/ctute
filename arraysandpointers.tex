@@ -1,134 +1,156 @@
 
-\chapter{Arrays and Pointers}
+\chapter{Arrays and Memory Allocation}
 
-So far we have only talked about single value types, such as \texttt{int} and \texttt{char}.
-Arrays are also an important aspect to a programming language, and C has these as well.
+So far we have only talked about single-value types, such as \texttt{int} and \texttt{char}.
+The simplest multi-value type is an array, which stores multiple values of another type.
+For example, you could have an array of 8 \texttt{int}s.
 
 \section{Declaring an array}
 
 Given a type \texttt{T}, you declare an array of \texttt{T} using square brackets as follows:
-
 \begin{codeinline}
-T array[numElements];
+T arrayVariable[numElements];
 \end{codeinline}
-
-Where \texttt{numElements} is the number of elements you want in the array.
-Note than until C99, numElements had to be a compile time constant.
-This means that in general, if you want to declare an array you must already know the size of it.
-This is not always possible, and how to deal with that will be covered later in this section.
+where \texttt{numElements} is the number of elements you want in the array.
+Note that \texttt{numElements} must be a compile-time constant in C90, but can be a runtime value in C99.
+This means that you generally need to know the size of an array before you declare it, which is not always possible.
+This issue is dealt with later in this chapter.
 
 Below are some example array declarations.
 These also show how you can make arrays of arrays.
+Arrays can be nested arbitrarily to create multidimensional arrays of any dimension.
 
 \begin{codeblock}
 int nums[6]; // Array of 6 ints
-int 2dNums[3][4]; // Array of 3 arrays of 4 ints
+int twoDimenionsOfNums[3][4]; // Array of 3 arrays of 4 ints
+\end{codeblock}
+
+\section{Initializing an array}
+
+When you declare a variable (including arrays) in a function, C allocates memory for it but does not initialize the memory to any particular value.
+This means that if we just declare an array like we did above, it will contain gibberish elements.
+We could loop through the array and assign each element to something sensible, or we could use C's array initialization syntax:
+
+\begin{codeblock}
+int a[4] = { 0, 1, 5, 6 }; // All elements are initialized
+int b[4] = { 4, 3 }; // Remaining elements are initialized to 0
+int c[4] = { }; // All elements are initialized to 0
+int d[] = { 8, 7, 9, 2 }; // We can leave off the size if
+                             // we initialize every element
 \end{codeblock}
 
 \section{Indexing an array}
 
 In C, arrays use 0-based indexing, which means that the first element in the array is at index 0.
-Indexing is done using square brackets similar to how the array were declared.
-The example below shows how the arrays declared above could be indexed.
+Indexing is done using square brackets, similar to how the arrays were declared.
+The arrays declared above could be indexed as follows:
 
 \begin{codeblock}
 nums[3] = 0; // 4th element of nums = 0
-2dNums[1][2] = 0; // 2nd row, 3rd column of 2dNums
+twoDimensionsOfNums[1][2] = 0; // 2nd row, 3rd column = 0
 \end{codeblock}
+
+There is nothing special about the first index of \lstinline!twoDimensionsOfNums! being the row and the second being the column.
+It is just as valid to have the first being the column and the second the row, as long as all of your code treats the array the same way.
 
 \section{Getting the size of an array}
 
 The C language provides no direct way to query the size of an array.
 It is up to you as the programmer to keep track of the array size, whether by using an additional variable or other means.
 
-\section{Pointer Basics}
+\section{Memory layout of an array}
 
-To understand how we declare an array without knowing its size at compile time, we need to introduce the concept of a pointer.
-Typically students report pointers as being one of the most difficult concepts to understand, especially when coming from a java/python background.
+An array in C is just a block of memory large enough to hold all of the array's values.
+The values are positioned sequentially in memory, from index 0 at the start of the array onwards.
+The array \lstinline!int triplets[3]! is a block of memory the size of three \lstinline!int!s.
+The first \lstinline!int!-worth of memory is \lstinline!triplets[0]!, the second is \lstinline!triplets[1]!, and the third and last is \lstinline!triplets[2]!.
 
-The simplest way to describe a pointer is as a variable which holds the address of some other piece of memory in the program.
+This is all the data that the program stores for the array, which explains why C cannot provide us with the size of the array at runtime --- it isn't recorded at all.
 
-This is a very powerful concept.
-Suppose within your function you have some variable \texttt{x}, and you want to call another function which will update the value of \texttt{x}.
-One option is to pass in \texttt{x} as a argument and then use the return value to assign the new value.
-This doesn't work if you need to update more than one parameter however.
-Instead of giving the function the value of \texttt{x} though, we could instead just tell them where \texttt{x} lives in the memory space.
-This is exactly what a pointer does, it defines where something lives, rather than the value it holds. 
-Of course given the address of something you can still obtain the value, this will be covered shorty.
+\section{Arrays and pointers}
 
-\subsection{Declaring a pointer}
+We have just seen that items in an array are simply locations in a region of memory.
+We already have a tool for working directly with memory locations --- pointers!
+It would be nice if we could use pointers to manipulate arrays and their elements.
 
-A pointer is declared by adding a * between the type and the variable name in a normal declaration.
-One thing you must be careful of is the associativity of the *.
-The * binds to the variable \emph{name}, not the type!
-This is a common way people get tricked on exams.
-A pointer can also point to another pointer.
+We can find the location of the first element in an array with \lstinline!&array[0]!.
+Indexing into \lstinline!array! gives us the value of the first element, and the address-of operator \lstinline!&! gives us its memory address.
+If we wanted to find the address of the second element we would use \lstinline!&array[1]!.
+Unfortunately, this doesn't help us if we don't have access to the \lstinline!array! variable.
+Given that the elements of an array are laid out in a contiguous line, and are all the same size\footnote{An item of a specific type has a fixed size in C}, there should be a way to calculate the address of the second element from the address of the first.
 
 \begin{codeblock}
-int *p; // Pointer to int
-int** p1; // Pointer to a pointer to an int
-int* x, y; // x is pointer to int, y is int!
+int array[5];
+int* firstElement = &array[0];
+int* secondElement = firstElement + 1; // equivalent to &array[1]
 \end{codeblock}
 
-\subsection{Getting the address of something}
+This is known as \emph{pointer arithmetic}.
+The value of a pointer is a numerical location, so by adding to it we get a location further along in memory.
+Notice that we wrote \lstinline!firstElement + 1! above; while memory addresses are normally thought of in bytes, C realises that \lstinline{firstElement} is a pointer to an \lstinline!int! and gives us a pointer 1 \lstinline!int! along from it, rather than 1 byte along.
+When using pointer arithmetic, C will always figure out how many bytes it should add to or subtract from the pointer to move the correct number of elements along.
 
-There are two ways you can get the address of something.
-The first is to steal it from somebody else.
-If you already have a pointer variable, you can assign it to another variable just like you would any other type.
+This is a very convenient pattern, and it turns out to not be a mere coincidence.
+Indexing an array and performing pointer arithmetic are the exact same thing!
+Remember that an array is really just a block of memory --- there is no better way to refer to it than by the memory address it starts at, and this is what C does.
+When we declare an array \lstinline!T array[n]!, the variable \lstinline!array! can be used as a pointer to the start of the array's memory, which is also the address of its first element.
+This means that where we were previously using \lstinline!&array[0]! we can now just use \lstinline!array!.
 
 \begin{codeblock}
-int* p = doSomething(); // Returns an int *
-int* p1 = p; // p1 points to the same thing p does.
+/* These are both the same */
+*(array + 1) = 1;
+array[1] = 1; 
 \end{codeblock}
 
-The other way is to task the compiler where it put something.
-You can do this with the \texttt{\&} operator.
-\texttt{\&variable} reads as ``Give me the address of \texttt{variable}''.
+The latter option (array indexing) is almost always prefered, as the intent is much clearer.
 
-\begin{codeblock}
-int x = 10;
-int* p = &x; // We would say p points to x
-\end{codeblock}
+We have seen that we can use pointer arithmetic on arrays.
+Since array indexing is translated to pointer arithmetic by the compiler, we can also use array indexing syntax on pointers instead of pointer arithmetic.
 
-\subsection{What does it actually point to?}
+\section{Memory allocation}
 
-Having the address of something would not really be that helpful if we can't go and take a look what's actually there.
-This is called \emph{dereferencing}, and we use the \texttt{*} operator for this.
-\texttt{*p}, where \texttt{p} is a pointer, says ``get me the value at the address this thing points to''.
-For example:
-
-\begin{codeblock}
-int x = 10;
-int* p = &x; // We would say p points to x
-int y = *p; // y = 10, because p points to x
-\end{codeblock}
-
-As well as getting the value of the thing it points to, we can also use a pointer to change that value.
-
-\begin{codeblock}
-int x = 10;
-int* p = &x; // We would say p points to x
-*p = 5; // x = 5, because p points to x
-\end{codeblock}
-
-\section{Dynamically sized array}
-
-With an understanding of basic pointers and arrays, we can now begin to understand how to make an array whose size is not known until runtime.
-An array is just a section of memory that can hold the required amount of the desired type, and a pointer gives us a way to refer to any memory, the missing link is how we can get this memory at runtime not compile time.
-
-\subsection{Memory Allocation}
-
-Fortunately the designers of the language thought about this, and included methods in the standard library which allow you to allocate memory.
-
-If you want to allocate memory, you can use the \texttt{malloc} function. 
+So far the only way we have allocated memory is by declaring a new variable.
+The C standard library provides us with the function \lstinline!malloc!\footnote{found in \lstinline{stdlib.h}} to allocate regions of memory at runtime whose sizes aren't known at compile time.
 
 \begin{codeinline}
 void* malloc(size_t size)
 \end{codeinline}
 
-The \texttt{size} argument is the size in \emph{bytes} you want to allocate.
+\lstinline!void*! is a new construct to us.
+Without the pointer, \lstinline!void! means that a function does not return any value, or does not take arguments (depending on context).
+A \emph{void pointer} has a different meaning --- it is a pointer which points to memory of an unknown or undecided type.
+C will automatically convert a void pointer to another pointer type if required.
+
+The \texttt{size} argument is the size in \emph{bytes} of the memory you want to allocate.
 That bit about \emph{bytes} is very important.
-You \textbf{must} follow the following pattern whenever you allocate memory unless you really know what you're doing.
+So far we have not dealt with sizes in terms of bytes (C handled that for us when we were doing pointer arithmetic).
+We need some way of finding out how many bytes of memory a certain type requires.
+For this we use the \lstinline!sizeof(...)! operator.
+\lstinline!sizeof! can take a variable, an expression, or a type, and will return its size in bytes.
+On a 64-bit machine:
+
+\begin{codeblock}
+short a = 1;
+short* b = &a;
+int c = 2;
+long d = 3;
+printf("%zu\n", sizeof(char)); // 1
+printf("%zu\n", sizeof(*b)); // 2
+printf("%zu\n", sizeof(c + 5)); // 4
+printf("%zu\n", sizeof(d)); // 8
+\end{codeblock}
+
+A typical memory allocation using \lstinline!malloc! will look like this:
+\begin{codeinline}
+int* dynamic = malloc(sizeof(int));
+\end{codeinline}
+
+You \textbf{must} follow a similar pattern whenever you allocate memory unless you really know what you're doing --- your should never call \lstinline!malloc! without using \lstinline!sizeof! to calculate the memory size.
+
+\section{Dynamic arrays}
+
+We know that arrays and regions of memory can be used interchangeably thanks to pointer arithmetic, and now we know how to allocate memory on-demand at runtime.
+All it takes is to put the two together and we have runtime-sized arrays.
 
 \begin{codeinline}
 T* mem = malloc(sizeof(T) * numElements);
@@ -136,9 +158,9 @@ T* mem = malloc(sizeof(T) * numElements);
 
 Here we see that mem will be a pointer to a chunk of memory large enough to hold \texttt{numElements} of type \texttt{T}.
 This is exactly what we needed for an array!
-We will talk more about this in a bit.
+Despite \lstinline!mem! not being declared as an array, it points to a piece of memory large enough for \lstinline!numElements! and can be used just like an array.
 
-Of course memory allocation does come at a cost, and that cost is you now have to \emph{manage} this newly allocated memory.
+This dynamic memory allocation does come at a cost however, and that cost is that you now have to \emph{manage} this newly allocated memory.
 It is up to you, the programmer, to keep track of the memory, and when you're done with it you must give it back to the system.
 You can give memory back by calling \texttt{free} on the original pointer given to you by malloc.
 
@@ -152,53 +174,14 @@ free(mem); // Now we're done give it back
 Not freeing your memory after you're done may not cause any immediate problems, but every system resource is finite and eventually you will run out.
 When this happens your program will probably crash, which is not desirable.
 
-Using memory after it has been freed is also another common bug, causing the dreaded ``segfault''.
+Using memory after it has been freed is also another common bug, and is one cause of the dreaded ``segfault''.
 Be mindful when you're freeing something that you have not got other variables set to the same pointer.
 
-\subsection{Pointer Indexing}
-
-So now we know how we can get a pointer to some memory that looks exactly like our array did, but we need to know how to index it.
-The solution to this is pointer arithmetic.
-This is best explained with an example
-
-\begin{codeblock}
-/* Pointer to memory for 5 ints */
-int* mem = malloc(sizeof(int) * 5); 
-int* first = mem + 0; // Pointer to first element 
-int* second = mem + 1; // Pointer to second element
-\end{codeblock}
-
-The key thing here is we did \texttt{+ 1}, not \texttt{+ sizeof(int)} like you may expect.
-When adding to a pointer, it will automatically increment by the correct number of bytes for the base types size.
-
-So if we want to access the value of the second int in out new array, we would have to do something like:
-
-\begin{codeinline}
-int second = *(mem + 1); // Deref second element
-\end{codeinline}
-
-This is cumbersome, fortunately the language designers thought so too, and so they allowed the array indexing syntax to also work for pointers.
-Note that this gives you the \emph{value} associated with the second element.
-If you want a pointer to the second element you must use arithmetic shown above or use the \texttt{\&} operator, also shown below.
-
-\begin{codeinline}
-int second = mem[1]; // Equivalent to code above!
-int* secondPointer = \&mem[1]; // Address of second elem
-\end{codeinline}
-
-We can also do assignment in just the same way.
-
-\begin{codeblock}
-/* These are both the same */
-*(mem + 1) = 1;
-mem[1] = 1; 
-\end{codeblock}
-
-\subsection{Multidimensional Dynamic Array}
+\section{Multidimensional dynamic arrays}
 
 Often you will need to have more than one dimension in your array, and doing the allocation for that can sometimes be tricky.
-The following example shows how to allocate a two dimensional array using \texttt{malloc}.
-Note how the convention for mallocing properly from above is followed here! 
+The following example shows one way of allocating a two dimensional array using \texttt{malloc}: by allocating an array of rows, and then allocating each row individually.
+Note how the convention for \lstinline!malloc!ing properly from above is followed here! 
 
 \begin{codeblock}
 int rows = 10;
@@ -210,63 +193,69 @@ for (int i = 0; i < rows; ++i) {
 }
 \end{codeblock}
 
-Now you should know everything you need to allocate an array dynamically.
-Also note that you can always allocate an array with size 1 if you only need 1 element!
-In that case it is usually more common to use the \texttt{*} operator for dereferencing rather than \texttt{[]}.
+Since we are allocating multiple separate pieces of memory here, it is not enough to simply free \lstinline!arr!.
+We must be careful to free every element of \lstinline!arr! (the rows) before we free \lstinline!arr!.
+
+As with the nested arrays we saw earlier in the chapter, there is nothing special about our choice of \lstinline!arr! as an array of rows rather than an array of columns.
+
+The other commonly used method for dynamically-sized multidimensional arrays is to allocate a single block of memory large enough to hold every element, and calculate the indexes required for specific elements.
+If we wanted an array equivalent to \lstinline!arr[3][7]! we would allocate a block $3 \times 7 = 21$ items long.
+The first seven elements correspond to \lstinline!arr[0]!, the second seven to \lstinline!arr[1]!, and so on.
+Thus the element correspending to \lstinline!arr[0][0]! would be at index \lstinline!0*7+0! and the element corresponding to \lstinline!arr[2][5]! would be at index \lstinline!2*7+5!.
+
+These two methods both have tradeoffs: the former is simple to use, but has more complicated allocation and deallocation routines, while the latter is easy to allocate and deallocate but it more complicated to use.
 
 \section{Passing arrays to functions}
 
 In C, unlike \texttt{int} and other single value types, arrays are \emph{not} passed into functions by value.
-The only way you can pass an array to a function is by using a pointer.
-Fortunately, even if you declared your array using the \texttt{[]} shown initially, its name can see be treated as a pointer of type \texttt{T *}.
+As we saw above, an array can be represented by a pointer to the start of its memory, and this is how it is passed to functions.
 
-The example below shows how to pass an array to a function (full function syntax will be discussed later).
+The example below shows how to pass an array to a function.
 The important thing in this example is you always need to pass the size of the array to the function, because as was said earlier, there is no way to know the size of the memory that the pointer points to automatically.
 If you know for sure the size you are passing (maybe it's always 1), then you could omit the size argument.
 
 \begin{codeblock}
-void arrayFunc(int *arr, int size)
-{
+void arrayFunc(int *arr, int size) {
     ...
 }
 
 
-void someFunc(void)
-{
+void someFunc(void) {
     int arr[20];
     otherFunc(arr, 20);
 }
 \end{codeblock}
 
+The \lstinline!arr! argument to \lstinline!arrayFunc! could equivalently be written as \lstinline!int arr[]!.
+When declaring an array argument to a function, the size can be left out as it may vary between calls to the function.
+
 \section{Returning an array from a function}
 
-This is where things can get a little tricky.
-If you declare an array using the \texttt{[]} syntax, it gets placed on the runtime stack.
-When you function returns, the runtime stack is removed.
-This means that you \textbf{cannot} return an array which was declared using \texttt{[]} syntax.
+If you allocate an array using the \texttt{[]} syntax, it gets placed on the runtime stack.
+When your function returns, the runtime stack is removed.
+This means that you \textbf{cannot} return an array which was allocated using \texttt{[]} syntax.
 
 If you want to return an array, you \textbf{must} allocate it dynamically using \texttt{malloc}.
 The downside is you then need a way to also return the size of the newly allocated array.
 You can do this using a pointer argument to the function, as shown below.
 
 \begin{codeblock}
-int* arrayAllocator(int *size)
-{
+int* arrayAllocator(int *size) {
     int* array = malloc(sizeof(int) * 20);
-    *size = 20; // Tell the caller how many!
+    *size = 20; // Tell the caller how many elements!
 
     return array;
 }
 
-void someFunc(void)
-{
+void someFunc(void) {
     int size, *array;
 
-    /* Note the use of & to make a pointer to the
-     * size variable, which arrayAllocator will
-     * update.
+    /* Note the use of & to make a pointer to the size
+     * variable, which arrayAllocator will update.
      */
     array = arrayAllocator(&size);
     printf("Array of size %d was allocated\n", size);
 }
 \end{codeblock}
+
+As with any use of \lstinline!malloc!, we must be careful to \lstinline!free! the array when we are done with it.

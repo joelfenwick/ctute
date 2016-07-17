@@ -1,9 +1,11 @@
 
-\chapter{Functions and Passing types}
+\chapter{Functions and Pointers}
 
 A function declaration in C consists of a return type, a function name and a parameter list.
 For example:
-\lstinline!int main(int argc, char** argv)!
+\begin{codeinline}
+int main(int argc, char** argv)
+\end{codeinline}
 A function definition has that information followed by a function body. 
 If no body is given, the declaration should be followed by a semi-colon.
 
@@ -101,9 +103,10 @@ int* lpointer; // longer but not necessarily any more meaningful
 int* i, j; // Warning: this does not mean what you think
 int *k; // the * can also go against the variable name
 int*p; // also legal. C doesn't care about spaces here
-int * q; // Now you're just being silly. (Still legal though).
+int * q; // Now you're just being silly. (Still legal though)
+int** m; // Pointers to pointers are okay too
 \end{codeblock}
-The last two lines are examples of legal code which is unnecessarily hard to read.
+Lines 5 \& 6 are examples of legal code which is unnecessarily hard to read.
 Remember that people (including you) will need to read your code later and you don't want that to be difficult.
 
 Line~3 illustrates a tricky part of pointer declarations.
@@ -116,6 +119,9 @@ Many people will try to tell you that there is though.
 It is more important that you use a form which you are comfortable with and (perhaps more importantly) is consistent with 
 the rest of the code you are writing.
 Most importantly, you need to conform with whatever style rules are in force for your organisation.
+
+Line~7 is an example of a pointer to a pointer.
+Since a pointer is a regular value, it must reside in memory, and so can be referred to with another pointer.
 
 Modify the swap declaration to be:
 \lstinline!void swap(int* p, int* q)!
@@ -152,7 +158,7 @@ Main points to remember:
  \item If you want to change something outside a function from inside the function, you may need to use a pointer.
  \item Pointers have two ends. eg \lstinline!int* fred!:   \texttt{fred} is the pointer and \texttt{*fred} is the thing 
  being pointed at.
- \item Pointers to different types of things are different. \texttt{int* c} and \texttt{char* i} are not the same type of thing.
+ \item Pointers to different types of things are different. \lstinline!int* c! and \lstinline!char* i! are not the same type of thing.
  \item There is a special pointer written as \texttt{NULL} or \texttt{0} which points to nothing.
  Trying to follow a \emph{null pointer} leads to sadness.
  \item Just like other variables in C, pointer variables are not guaranteed to be initialised.
