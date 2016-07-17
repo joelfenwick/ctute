@@ -106,7 +106,7 @@ int*p; // also legal. C doesn't care about spaces here
 int * q; // Now you're just being silly. (Still legal though)
 int** m; // Pointers to pointers are okay too
 \end{codeblock}
-The last two lines are examples of legal code which is unnecessarily hard to read.
+Lines 5 \& 6 are examples of legal code which is unnecessarily hard to read.
 Remember that people (including you) will need to read your code later and you don't want that to be difficult.
 
 Line~3 illustrates a tricky part of pointer declarations.
@@ -121,7 +121,7 @@ the rest of the code you are writing.
 Most importantly, you need to conform with whatever style rules are in force for your organisation.
 
 Line~7 is an example of a pointer to a pointer.
-Since a pointers is a regular value, it must reside in memory, and so can be referred to with another pointer.
+Since a pointer is a regular value, it must reside in memory, and so can be referred to with another pointer.
 
 Modify the swap declaration to be:
 \lstinline!void swap(int* p, int* q)!

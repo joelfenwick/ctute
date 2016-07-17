@@ -102,6 +102,8 @@ This means that where we were previously using \lstinline!&array[0]! we can now 
 array[1] = 1; 
 \end{codeblock}
 
+The latter option (array indexing) is almost always prefered, as the intent is much clearer.
+
 We have seen that we can use pointer arithmetic on arrays.
 Since array indexing is translated to pointer arithmetic by the compiler, we can also use array indexing syntax on pointers instead of pointer arithmetic.
 
@@ -200,6 +202,8 @@ The other commonly used method for dynamically-sized multidimensional arrays is 
 If we wanted an array equivalent to \lstinline!arr[3][7]! we would allocate a block $3 \times 7 = 21$ items long.
 The first seven elements correspond to \lstinline!arr[0]!, the second seven to \lstinline!arr[1]!, and so on.
 Thus the element correspending to \lstinline!arr[0][0]! would be at index \lstinline!0*7+0! and the element corresponding to \lstinline!arr[2][5]! would be at index \lstinline!2*7+5!.
+
+These two methods both have tradeoffs: the former is simple to use, but has more complicated allocation and deallocation routines, while the latter is easy to allocate and deallocate but it more complicated to use.
 
 \section{Passing arrays to functions}
 
