@@ -51,7 +51,8 @@ int fgetc(FILE* file)
 The function takes the \texttt{FILE*} you want to read from and returns the next value in the stream.
 One thing that is important to note here is that while the next value in the stream is always of type \texttt{char}, \texttt{fgetc} returns type \texttt{int}. 
 The reason for this is that when there is nothing left to read, the function needs a way to tell you.
-It does this by returning the value \texttt{EOF}, however it needs an extra value (outside the range of a \texttt{char}) to do this.
+It does this by returning the value \texttt{EOF}, however it needs an extra value (outside the range of a \texttt{char}) to do this\footnote{Remember: EOF is not actually a
+value in the file. A special value to watch out for like this is called a ``sentinel''.}.
 By returning an \texttt{int} it as able to do this, however you must be careful to never directly assign the result of \texttt{fgetc} to a \texttt{char}.
 The example below shows how to correctly read a character using \texttt{fgetc}.
 
@@ -66,6 +67,22 @@ if (next == EOF) {
 }
 \end{codeblock}
 
+You might wonder why this code wasn't written like this:
+\begin{codeblock}
+char result;
+if (feof(stdin)) {
+    printf("End of file encountered, exiting!\n");
+    exit(0);	// This seems drastic
+} else {
+    result = (char)fgetc(stdin);
+}    
+\end{codeblock}
+\noindent C IO functions do not detect EOF until after the program has tried (and failed)
+to read anything\footnote{Yes, this is like checking for the edge of a cliff by asking if you are falling, but that is how C does things.}.
+So even if the program had read everything in the file, it still would not know that it 
+was at the end of the file until the next read.
+
+
 Often in your program you will want to read a line of text from the file, not just a single character.
 It is helpful in this instance to write a small function that does this which you can reuse later on.
 The following is a small example of how to do this.
@@ -73,7 +90,7 @@ It first checks for either end of file or newline and returns the result (making
 
 This example uses a fixed size buffer, it is up to the user to work out how to make this more useful.
 The \texttt{realloc} function may be useful for this.
-It may also be useful to differentiate between an empty line ending in a newline or a line only containing \texttt{EOF} (perhaps by returning \texttt{NULL}).
+It may also be useful to differentiate between an empty line ending in a newline and encountering the end of the file (perhaps by returning \texttt{NULL}).
 
 \begin{codeblock}
 char* read_line(FILE* file)
@@ -119,7 +136,7 @@ In general, whenever you want something to appear in the file (this could be std
 
 \section{When you're finished with a file}
 
-There are only a finite amount of files a process/user can have open at any one time.
+Some systems impose a limit on the number of files a process/user can have open at any one time.
 When you're finished with a file, it is good practice to close it and free up its resources.
 This is done using \texttt{fclose}.
 Closing the file also flushes any buffers associated with it if you hadn't done it already.
