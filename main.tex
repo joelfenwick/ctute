@@ -3,7 +3,7 @@
 \usepackage{listings}
 \usepackage{textcomp}
 \usepackage{color}
-\usepackage{hyperref}
+\usepackage[colorlinks=true, linkcolor=black]{hyperref}
 \usepackage{graphicx}
 
 % This document (including sub files) is made available under 
@@ -25,6 +25,7 @@
 %    Think you need to add a class or package to this repo, please think again.
 %  * Content is to be restricted to standard-C99
 
+\newenvironment{exercise}{\noindent\ignorespaces {\large Exercise:}\addcontentsline{toc}{section}{Exercise}\\}{}
 
 \newcommand{\todo}[1]{\textbf{#1}}
 \lstset{basicstyle=\ttfamily,
@@ -50,7 +51,21 @@
 \title{A C tutorial/refresher}
 \author{Joel Fenwick (editor)}
 \addcontentsline{toc}{section}{Cover}
-\maketitle
+\pagestyle{empty}
+
+\vspace*{6cm}
+\begin{center}
+{\LARGE A C tutorial/refresher}\\
+\end{center}
+\vfill
+\begin{flushright}
+Joel Fenwick (editor)\\
+Justin Goldizen\\
+Mitchell Krome\\
+Will Toohey 
+\end{flushright}
+\vfill
+\vfill
 
 \tableofcontents
 \addcontentsline{toc}{section}{Contents}

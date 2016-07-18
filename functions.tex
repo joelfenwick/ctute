@@ -1,5 +1,5 @@
 
-\chapter{Functions and Pointers}
+\chapter{Functions and Passing Variables}
 
 A function declaration in C consists of a return type, a function name and a parameter list.
 For example:
@@ -39,7 +39,10 @@ int maximum(int a, int b) {
 }
 \end{codeblock}
 
-Exercise: Write a function which \emph{returns} the maximum of three integers and a program to test it.
+\begin{exercise}
+Write a function which \emph{returns} the maximum of three integers and a program to test it. 
+\end{exercise}
+
 
 Enter and compile the following:
 \begin{codeblock}
@@ -165,15 +168,17 @@ Main points to remember:
  That is, they do not point anywhere sensible unless you tell them to.
 \end{enumerate}
 
-
-Exercise: suppose you have 3 variables \texttt{a, b, c}.
+\begin{exercise}
+Suppose you have 3 variables \texttt{a, b, c}.
 Write a function which you can use to switch the values around so that 
 \texttt{a} takes the value of \texttt{b}, \texttt{b} takes \texttt{c}
 and \texttt{c} takes the original value of \texttt{a}.
 
 So, if \lstinline{a=0, b=1, c=2} before the call, then after the call:
 \lstinline{a=1, b=2, c=0}.
-Write a program to test your function.
+Write a program to test your function. 
+\end{exercise}
+
 
 
 
