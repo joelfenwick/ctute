@@ -65,19 +65,17 @@ Whatever you do to it in the function will not be reflected in the calling funct
 You can return structs from a function to allow the values to be updated, but that involves a lot of copying you probably don't need.
 
 As a general rule, if you're passing a struct to a function it's likely you want to be passing a pointer to that stuct.
-As was previously mentioned in the pointers section, a pointer lets the function know where \emph{your} copy of the stuct it and allows it to update it.
-The follow example demonstrates how this works.
+As was previously mentioned in the pointers section, a pointer lets the function know where \emph{your} copy of the stuct is and allows it to update it.
+The following example demonstrates how this works.
 
 \begin{codeblock}
-void
-structFunc(struct myStruct *s)
+void structFunc(struct myStruct *s)
 {
     /* Note the use of -> because we have a pointer */
     s->a = 10;
 }
 
-void
-otherFunc(void)
+void otherFunc(void)
 {
     struct myStruct s;
 
@@ -91,15 +89,15 @@ otherFunc(void)
 
 \section{Self referencing structs}
 
-An interesting thing to consider is whether a struct can contain itself.
-If you think about this, a struct containing itself creates an infinite recursion when computing the size, so it is not allowed.
-However a struct can contain a \emph{pointer} to itself.
+An interesting thing to consider is whether a struct can contain another struct of the same type.
+If you think about this, a struct containing the same type creates an infinite recursion when computing the size, so it is not allowed.
+However a struct can contain a \emph{pointer} to its own type.
 Why?
 Because the size of a pointer is always known by the compiler.
 The size of the thing it points to has no impact on the memory needed to store an address.
 
 Consider the example below.
-We have a struct type called \texttt{node} which has 2 ints and then a pointer to another struct of the same type.
+We have a struct type called \texttt{node} which has two ints and then a pointer to another struct of the same type.
 You will see how this can be used to implement useful data structures in a later section.
 
 \begin{codeblock}
@@ -113,7 +111,7 @@ struct node {
 \section{The size of a struct}
 
 In the above section we mentioned the compiler computing the size of a struct.
-If you want to use the malloc rule that was introduced early, you need to be able to find the size of the struct in bytes.
+If you want to use the malloc rule that was introduced earlier, you need to be able to find the size of the struct in bytes.
 Fortunately this works just like every other type!
 
 \begin{codeinline}

@@ -5,6 +5,7 @@
 \usepackage{color}
 \usepackage[colorlinks=true, linkcolor=black]{hyperref}
 \usepackage{graphicx}
+\usepackage{framed}
 
 % This document (including sub files) is made available under 
 % Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
@@ -26,6 +27,7 @@
 %  * Content is to be restricted to standard-C99
 
 \newenvironment{exercise}{\noindent\ignorespaces {\large Exercise:}\addcontentsline{toc}{section}{Exercise}\\}{}
+\newenvironment{knowledge}{\begin{framed}}{\end{framed}}
 
 \newcommand{\todo}[1]{\textbf{#1}}
 \lstset{basicstyle=\ttfamily,
@@ -56,6 +58,7 @@
 \vspace*{6cm}
 \begin{center}
 {\LARGE A C tutorial/refresher}\\
+{\large 2016-1}\\
 \end{center}
 \vfill
 \begin{flushright}

@@ -1,8 +1,9 @@
 
 \chapter{Strings}
 
-
-\todo{Need to have concepts this section assumes:    chapters on arrays and files}
+\begin{knowledge}
+This part assumes that you have a good understanding of the materials on arrays and files. 
+\end{knowledge}
 
 So far, we have output strings (using the \%s placeholder) but apart from \texttt{argv} in main have avoided string variables and string input.
 Strings are stored in arrays of char, however in C you can ask how long a string is but not how big an array is.
@@ -21,7 +22,7 @@ single[1] = '\0';
 \end{codeblock}
 
 would make \texttt{single}, the same as \verb!"A"!.
-Note the use of \verb!'! around characters and \verb!"! to mark strings.
+Note the use of \lstinline!'! around characters and \lstinline!"! to mark strings.
 
 On the other hand,
 \begin{codeblock}
@@ -62,7 +63,7 @@ strcmp("B", "A") == -1 // arguments are in reverse order
 strcmp("B", "B") == 0  // arguments are the same
 strcmp("A", "B") == 1  // arguments are in correct order
 \end{codeblock}
-That is, strcmp returns \emph{0} if strings are the same.
+That is, strcmp returns \textbf{0} if strings are the same.
 
 To copy strings, use \texttt{strcpy}:
 \lstinline{strcpy(buffer, "hello ");}
@@ -74,7 +75,7 @@ If buffer was declared as \lstinline!char buffer[12]! or bigger then we are ok.
 If it was smaller (eg 2 chars), then the string functions would write off the end of the array and corrupt other variables or crash (possibly)\footnote{This possibly is the worst part.
 The program \emph{might} crash or it might look fine.
 The behaviour might change depending on which system you ran the program on.
-Undefined and unpredictable behaviour like this can be very hard to find and debug.}
+Undefined and unpredictable behaviour like this can be very hard to find and debug.}.
 
 What if you want to put numbers into a string? 
 The simplest way is with \emph{s}\texttt{printf}:

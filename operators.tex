@@ -3,7 +3,7 @@
 
 %Until now, I've avoided putting (non-atom) expressions into calls.
 
-In most cases in C, where you write literal values, you can write expressions\footnote{More information:
+In most cases in C, wherever you write literal values, you can write expressions\footnote{More information:
 there are some things which need to be known at \emph{compile time} rather than \emph{run time}.
 The most obvious cases of this are \emph{case labels} and array sizes in ANSI-C.}.
 An expression is a fragment of code which can be ``evaluated'' --- that is, they can be processed to get a value.
@@ -18,7 +18,7 @@ Division is written with $/$ and multiplication as $*$.
 
 The \% operator (known as ``modulo'') returns the remainder of its arguments;
 \texttt{a\%b} returns the remainder when \texttt{a} is divided by \texttt{b}.
-For example: $7\%3$ is $1$   and $23\%5$ is $3$.
+For example: \lstinline!7%3! is $1$   and \lstinline!23%5! is $3$.
 
 
 \subsection{Precedence}
@@ -51,7 +51,7 @@ Modify the program above to test relative precedence of \texttt{+} and \texttt{\
 \end{exercise}
 
 
-\subsection{Simple Types}
+\subsection{Simple Types}\label{sec:types}
 All of C's simple types are numeric in some way.
 This includes types which have other purposes (\texttt{char} and \texttt{bool}).
 

@@ -1,8 +1,9 @@
 
 \chapter{First program}
 
-\todo{Need to have concepts this section assumes:    strings and arrays.}
-
+\begin{knowledge}
+This part assumes that you are familiar with strings and arrays from some other programming language.
+\end{knowledge}
 
 Compile and run the following:
 \begin{codeblock}
@@ -26,13 +27,13 @@ int main(int argc, char** argv) {
  \item[3] begins a function definition\footnote{A definition tells the compiler both that the function exists(called declaration), and what the function does.}.
  All standard C programs must have a function called \texttt{main}.
  Unless your system has special requirements, you should use the signature\footnote{A function's signature gives the function's name, its return type and the type and order of parameters.} shown here.
- We have not discussed types yet (we'll look at types in See Item~???) but for now, \texttt{int} is an 
+ We have not discussed types yet (we'll look at types in Section~\ref{sec:types}) but for now, \texttt{int} is an 
  integer\footnote{A whole number, either positive or negative} while \texttt{char} on its own represents a character.
  The first \texttt{int} means that our \texttt{main} function returns an int.
  The parts in parentheses are the parameters for the function.
  The first one is an integer and the second one has something to do with characters.
  Without explaining why now, the second parameter is an array of strings.
- Note that this program doesn't actually make use of the parameters it is passed.
+ Note that this program doesn't actually make use of the parameters it declares.
  
  \item[4] This is a function call. It has the name of a function \texttt{printf} followed by arguments in parentheses.
  Text in double quotes represents a string. 

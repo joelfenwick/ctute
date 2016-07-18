@@ -7,14 +7,18 @@
  could be called later with a different argument.
  
  Note that arguments are distinct from the names given to the variables the arguments are stored in inside the function (see \hyperlink{defn:parameter}{Parameters}).
+ 
  \item[\hypertarget{defn:array}{Array}] A variable, which contains multiple values intead of just one. 
  Individual values are accessed by their \texttt{index} within the array.
  In most C derived languages this is indicated with brackets.
  eg:
     \lstinline!scores[17]!
     
- In C, all the values have the same type and the size of the array is fixed 
+ In C arrays, all the values have the same type and the size of the array is fixed 
  when it is created.
+ 
+ \item [\hypertarget{defn:dynamicmemory}{Dynamic memory}] Memory which is allocated on the heap rather than the stack.
+ Unlike the stack, memory on the heap is not automatically cleaned up during the program's lifetime.
  
  \item[\hypertarget{defn:parameter}{Parameter}] A piece of information which a function needs in order to do its job.
  For example: the function for computing a square root could be declared as:

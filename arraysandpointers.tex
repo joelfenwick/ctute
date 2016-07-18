@@ -12,7 +12,8 @@ Given a type \texttt{T}, you declare an array of \texttt{T} using square bracket
 T arrayVariable[numElements];
 \end{codeinline}
 where \texttt{numElements} is the number of elements you want in the array.
-Note that \texttt{numElements} must be a compile-time constant in C90, but can be a runtime value in C99.
+Note that \texttt{numElements} must be a compile-time constant in C90, but can be a runtime value in C99\footnote{Even in C99, do not attempt to create massive arrays in this way.
+stack space is more limited that heap}.
 This means that you generally need to know the size of an array before you declare it, which is not always possible.
 This issue is dealt with later in this chapter.
 
@@ -109,7 +110,9 @@ Since array indexing is translated to pointer arithmetic by the compiler, we can
 \section{Memory allocation}
 
 So far the only way we have allocated memory is by declaring a new variable.
-The C standard library provides us with the function \lstinline!malloc!\footnote{found in \lstinline{stdlib.h}} to allocate regions of memory at runtime whose sizes aren't known at compile time.
+The C standard library provides us with the function \lstinline!malloc!\footnote{found in \lstinline{stdlib.h}} to allocate regions of memory at 
+runtime whose sizes aren't known at compile time.
+Any memory on the \emph{heap} (where malloc takes its memory from) is referred to as ``\hyperlink{defn:dynamicmemory}{dynamic memory}''.
 
 \begin{codeinline}
 void* malloc(size_t size)
@@ -125,7 +128,9 @@ That bit about \emph{bytes} is very important.
 So far we have not dealt with sizes in terms of bytes (C handled that for us when we were doing pointer arithmetic).
 We need some way of finding out how many bytes of memory a certain type requires.
 For this we use the \lstinline!sizeof(...)! operator.
-\lstinline!sizeof! can take a variable, an expression, or a type, and will return its size in bytes.
+\lstinline!sizeof! can take a variable, an expression, or a type, and will return its size in bytes\footnote{\emph{Technically} according to the standard, \lstinline!sizeof!
+and \lstinline!malloc! deal in ``allocation units''. But the authors have not encountered a system where the allocation unit is not bytes.
+Still, this is another reason to do things properly (with \lstinline!sizeof!) rather than taking shortcuts}.
 On a 64-bit machine:
 
 \begin{codeblock}
@@ -144,7 +149,8 @@ A typical memory allocation using \lstinline!malloc! will look like this:
 int* dynamic = malloc(sizeof(int));
 \end{codeinline}
 
-You \textbf{must} follow a similar pattern whenever you allocate memory unless you really know what you're doing --- your should never call \lstinline!malloc! without using \lstinline!sizeof! to calculate the memory size.
+You \textbf{must} follow a similar pattern whenever you allocate memory unless you really know what you're doing --- your should 
+never call \lstinline!malloc! without using \lstinline!sizeof! to calculate the memory size.
 
 \section{Dynamic arrays}
 
@@ -210,7 +216,7 @@ In C, unlike \texttt{int} and other single value types, arrays are \emph{not} pa
 As we saw above, an array can be represented by a pointer to the start of its memory, and this is how it is passed to functions.
 
 The example below shows how to pass an array to a function.
-The important thing in this example is you always need to pass the size of the array to the function, because as was said earlier, there is no way to know the size of the memory that the pointer points to automatically.
+The important thing in this example is that you always need to pass the size of the array to the function, because as was said earlier, there is no way to know the size of the memory that the pointer points to automatically.
 If you know for sure the size you are passing (maybe it's always 1), then you could omit the size argument.
 
 \begin{codeblock}
@@ -231,10 +237,10 @@ When declaring an array argument to a function, the size can be left out as it m
 \section{Returning an array from a function}
 
 If you allocate an array using the \texttt{[]} syntax, it gets placed on the runtime stack.
-When your function returns, the runtime stack is removed.
+When your function returns, memory on the stack is available for reuse and so could easily get overwritten.
 This means that you \textbf{cannot} return an array which was allocated using \texttt{[]} syntax.
 
-If you want to return an array, you \textbf{must} allocate it dynamically using \texttt{malloc}.
+If you want to create an array and return it, you \textbf{must} allocate it dynamically using \texttt{malloc}.
 The downside is you then need a way to also return the size of the newly allocated array.
 You can do this using a pointer argument to the function, as shown below.
 

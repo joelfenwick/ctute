@@ -84,31 +84,31 @@ So to display command line arguments:
 C has three types of loop structure:
 
 The \emph{for} loop:
-\begin{codeblock}
+\begin{codeinline}
 for (Setup ; Test ; Update) {
     Body
 }
-\end{codeblock}
+\end{codeinline}
 
 The \emph{while} loop:
-\begin{codeblock}
+\begin{codeinline}
 Setup
 while (Test) {
     Body
     Update
 }
-\end{codeblock}
+\end{codeinline}
 
 and the \emph{do-while} loop:
-\begin{codeblock}
+\begin{codeinline}
 Setup
 do {
     Body
     Update
 } while(Test);
-\end{codeblock}
+\end{codeinline}
 
-The \emph{do-while} loop differs from the \emph{while} loop by always running the Body and Update once before the Test is performed and the loop loops.
+The \emph{do-while} loop differs from the \emph{while} loop by always running the Body and Update once before the Test is performed and the loop repeats.
 
 So we could do this:
 \begin{codeblock}
