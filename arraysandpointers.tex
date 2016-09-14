@@ -13,7 +13,7 @@ T arrayVariable[numElements];
 \end{codeinline}
 where \texttt{numElements} is the number of elements you want in the array.
 Note that \texttt{numElements} must be a compile-time constant in C90, but can be a runtime value in C99\footnote{Even in C99, do not attempt to create massive arrays in this way.
-stack space is more limited that heap}.
+Stack space is more limited than heap}.
 This means that you generally need to know the size of an array before you declare it, which is not always possible.
 This issue is dealt with later in this chapter.
 
