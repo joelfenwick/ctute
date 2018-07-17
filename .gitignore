@@ -4,3 +4,5 @@
 *.gz
 *.toc
 *.log
+*.fls
+*.fdb_*

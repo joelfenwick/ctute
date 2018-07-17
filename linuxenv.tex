@@ -52,22 +52,22 @@ This is the default name for programs made with \texttt{gcc}. The name can be ch
 by using the ``-o'' option:
 
 \begin{verbatim}
-gcc test.c -o test
+    gcc test.c -o test
 \end{verbatim}
 This would produce an output file named \texttt{test}.
 \\
 Execute your program with:
 \begin{verbatim}
-./a.out 
+    ./a.out 
 \end{verbatim}
-and check that the exit status was $5$ as exepected. When a program returns from main its ``exit status'' is the value returned.
+and check that the exit status was $5$ as expected. When a program returns from main its ``exit status'' is the value returned.
 
 Depending on your requirements, you may need to comply with some particular version of the C language standard.
-Adding one of the following to your compile line will do this.
+Adding one of the following to your compile line will do this.\\
 
-\begin{tabular}{c|c}
+\begin{tabular}{l|l}
 -ansi & C89/C90 \\
--std=c99 & C 99 \\
+-std=c99 & C99 \\
 -std=gnu99 & C99 with some gnu extras\\
 \end{tabular}
 
@@ -77,14 +77,14 @@ Adding one of the following to your compile line will do this.
 The distinction between these is more important when a program's source consists of multiple 
 files.
 \begin{verbatim}
-gcc -c file1.c
-gcc -c file2.c
-gcc -c file3.c
+    gcc -c file1.c
+    gcc -c file2.c
+    gcc -c file3.c
 \end{verbatim}
 Would compile each of the files (and check them for correctness) to a corresponding \texttt{.o} file.
 Following that:
 \begin{verbatim}
-gcc file1.o file2.o file3.o 
+    gcc file1.o file2.o file3.o 
 \end{verbatim}
 would ``link'' i.e. combine the pieces together and check for consistency and completeness.
 
@@ -98,7 +98,7 @@ While warnings for other languages often mean ``your code could be written more 
 You can save error messages by adding \verb|2>errfilename| to the end of a command.
 For example:
 \begin{verbatim}
-gcc myfile.c 2>errors.log
+    gcc myfile.c 2>errors.log
 \end{verbatim}
 
 
