@@ -82,11 +82,11 @@ There are other type modifiers but we'll keep this simple and standard\footnote{
 
 To output other types with \texttt{printf}, different placeholders are required:
 \begin{itemize}
- \item [\%e \%f \%g] --- all of these will output a \texttt{float} \emph{or} \texttt{double} but they format it in different ways.
- \item [\%c] --- prints a char (as a character rather than as a number).
- \item [\%hd] --- prints a \texttt{short int}.
- \item [\%ld] --- prints a \texttt{long int}.
- \item [\%u]  --- prints an \texttt{unsigned int}.
+ \item [\texttt{\%e \%f \%g}] --- all of these will output a \texttt{float} \emph{or} \texttt{double} but they format it in different ways.
+ \item [\texttt{\%c}] --- prints a char (as a character rather than as a number).
+ \item [\texttt{\%hd}] --- prints a \texttt{short int}.
+ \item [\texttt{\%ld}] --- prints a \texttt{long int}.
+ \item [\texttt{\%u}]  --- prints an \texttt{unsigned int}.
 \end{itemize}
 Consult documentation for other combinations.
 
@@ -107,7 +107,7 @@ These operators act on the individual bits in the value.
 
 These return a boolean value \texttt{true} or \texttt{false}.
 Remember that in C, \texttt{bool}s are also integer values.
-A 0 indicates false, and any non-zero value is interpretted as true.
+A 0 indicates false, and any non-zero value is interpreted as true.
 
 \lstinline|a < b, a <= b, a > b, a >= b, a != b, a == b|.
 Be careful comparing floating point values, since numerical errors can 
