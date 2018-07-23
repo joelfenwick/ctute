@@ -7,7 +7,7 @@ This part assumes that you have a good understanding of the materials on arrays 
 
 So far, we have output strings (using the \%s placeholder) but apart from \texttt{argv} in main have avoided string variables and string input.
 Strings are stored in arrays of char, however in C you can ask how long a string is but not how big an array is.
-This is because strings use a special character with the numeric value $0$ (written as \verb!'\0'!) to mark the end of the string.
+This is because strings use a special character with the numeric value $0$ (written as \verb!`\0'!) to mark the end of the string.
 So \lstinline!strlen("") == 0! that is, the length of the empty string is zero.
 This also means that \lstinline!("")[0] == '\0'!.
 The \emph{null terminator} is not counted as part of the length of the string.
