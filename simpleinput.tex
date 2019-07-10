@@ -62,7 +62,7 @@ But it didn't get rid of the \texttt{z} either, so when the loop ran again, \tex
 Hence the infinite loop you saw.
 When you use functions, you should (if possible) check to see if it worked.
 \texttt{scanf} will return the number of variables it managed to read correctly.
-So in this case, if the input succeeded, we would expect a return value of $1$.
+So in this case, if the input succeeded, we would expect a return value of \texttt{1}.
 Replace the \texttt{scanf} call with:
 \begin{codeblock}
     if (scanf("%d", &number) == 1) {

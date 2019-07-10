@@ -42,9 +42,9 @@ echo $?
 \end{verbatim}
 
 This asks the shell to tell you what happened with the previous command (its ``exit status'').
-By tradition, anything other than $0$ indicates some form of error.
-In this case, the compiler failed and \verb!$?! reflects that.
-Now edit \texttt{test.c} to add a semicolon after the $5$, then recompile.
+By tradition, anything other than \texttt{0} indicates some form of error.
+In this case, the compiler failed and \texttt{\$?} reflects that.
+Now edit \texttt{test.c} to add a semicolon after the \texttt{5}, then recompile.
 You should not see any messages.
 
 Look in the current directory, and you should see a new file called \texttt{a.out}.
@@ -60,7 +60,7 @@ Execute your program with:
 \begin{verbatim}
     ./a.out 
 \end{verbatim}
-and check that the exit status was $5$ as expected. When a program returns from main its ``exit status'' is the value returned.
+and check that the exit status was \texttt{5} as expected. When a program returns from main its ``exit status'' is the value returned.
 
 Depending on your requirements, you may need to comply with some particular version of the C language standard.
 Adding one of the following to your compile line will do this.\\

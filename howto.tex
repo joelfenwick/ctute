@@ -36,8 +36,8 @@ As an example, suppose the grid contents (surrounded by a border) were:
 +-----+
 \end{verbatim}
 \end{center}
-and the cell $3 1$ was chosen (that is, Row~$3$ and Column~$1$, with the top left being $0$ $0$).
-In this case, all of Row~$3$ would be removed as well as the last value on Row~$2$.
+and the cell \texttt{3 1} was chosen (that is, Row~\texttt{3} and Column~\texttt{1}, with the top left being \texttt{0 0}).
+In this case, all of Row~\texttt{3} would be removed as well as the last value on Row~\texttt{2}.
 
 \pagebreak
 \begin{center}
@@ -67,10 +67,10 @@ the gap.
 \end{verbatim}
 \end{center}
 
-If $4\:1$ was chosen, nothing would happen because the `c' in that cell is not touching any other `c's.
+If \texttt{4 1} was chosen, nothing would happen because the `c' in that cell is not touching any other `c's.
 If a removal leaves one or more whole columns empty, any columns to the right of the empty ones, will be
 moved over to fill the gap.
-For example, if $1\:0$ was chosen in the above, the result would be:
+For example, if \texttt{1 0} was chosen in the above, the result would be:
 
 \begin{center}
 \begin{verbatim}
@@ -96,7 +96,7 @@ If the grid looked like:
 +-----+
 \end{verbatim}
 \end{center}
-and $0\:0$ was chosen, the result would be:
+and \texttt{0 0} was chosen, the result would be:
 \begin{center}
 \begin{verbatim}
 +-----+
@@ -120,7 +120,7 @@ Usage: match height width filename
 \end{verbatim}
 and exit (see the error table).
 
-\texttt{height} and \texttt{width} must be positive integers greater than 1 and less than $1,000$.
+\texttt{height} and \texttt{width} must be positive integers greater than 1 and less than \texttt{1,000}.
 \texttt{filename} must be a path to a readable file containing a valid grid (see later) with dimensions matching \texttt{height}
 and \texttt{width}.
 See the error table for what to do if these constraints are not met.
@@ -134,7 +134,7 @@ If there are no legal moves, it should exit with the appropriate message; otherw
 (note, a space follows the prompt).
 The user should then enter either:
 \begin{itemize}
- \item the row and column they wish to remove (space separated). eg $3\:2$
+ \item the row and column they wish to remove (space separated). eg \texttt{3 2}
  \item \texttt{w} followed immediately by a filename(or path). eg \texttt{whello}
  This will result in the current grid (including the border) being written to a file called ``hello''.
 \end{itemize}
@@ -172,7 +172,7 @@ Cannot open grid file& 3 & Invalid grid file \\\hline
 Error reading grid. Eg: bad chars in input, not enough lines, short lines & 4 & Error reading grid contents \\\hline
 \end{tabular}
 \end{center}
-For a normal exit, the status will be $0$ and no special message is printed.
+For a normal exit, the status will be \texttt{0} and no special message is printed.
 
 There are a number of conditions which should cause messages to be displayed but which should not immediately terminate the program.
 These messages should also go to standard error.
