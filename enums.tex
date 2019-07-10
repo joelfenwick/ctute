@@ -1,0 +1,106 @@
+
+\chapter{Enums}
+
+An enumerated type is one which has a set of discrete possible values, each with a symbolic name. 
+These values are mapped to integer values for storage.
+
+\section{Usage}
+
+For example:
+\begin{codeinline}
+enum Day {
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY
+};
+\end{codeinline}
+
+This allows you to write things like:
+\begin{codeinline}
+enum Day next_day(enum Day d);  // pass in and out of functions
+
+Day d=MONDAY;  // declare variables
+
+while (d!=WEDNESDAY) ...
+
+switch(...) {   
+case SUNDAY:...
+...
+};
+\end{codeinline}
+
+
+You can specify values for enumerated types
+\begin{codeinline}
+enum Day {
+    SUNDAY=1,
+    MONDAY=2,
+    ...
+};
+\end{codeinline}
+
+If you don't specify values, the compile will choose them.
+
+\section{Typedef-ing}
+As with other types, you can use typedef to avoid having to write \texttt{enum} whenever you use them:
+\begin{codeinline}
+typedef enum {
+...
+} Day;
+
+Day next_day(Day d);
+\end{codeinline}
+
+
+\section{What they are really}
+
+As noted above, enums are stored as integers.
+Unlike in some other languages, enums are not treated as a separate type by the compiler.
+It will not prevent invalid numeric values being stored in enum variables.
+
+For example, the following are legal:
+\begin{codeinline}
+Day d=SATURDAY;
+d++;
+
+typedef enum {
+    RED,
+    GREEN,
+    BLUE
+} Colour;
+Day d=GREEN;
+\end{codeinline}
+
+If the name of an enum value could appear in multiple contexts, it's a good idea to add a prefix to tell them apart.
+For example:
+\begin{codeinline}
+typedef enum {
+    PRESTART=0,
+    INIT=1
+    PREPROCESS=2,
+    DONE=3
+} InputState;
+
+typedef enum {
+    START=0,
+    PROCESS=1,
+    DONE=2      // Ambiguous with InputState version
+} OuputState;
+\end{codeinline}
+
+Something like the following would avoid this:
+\begin{codeinline}
+typedef enum {
+    IS_PRESTART=0,
+    IS_INIT=1
+    IS_PREPROCESS=2,
+    IS_DONE=3
+} InputState;
+\end{codeinline}
+
+
+
